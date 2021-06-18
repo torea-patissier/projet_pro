@@ -7,7 +7,7 @@ class bdd
         {
             $local = 'mysql:host=localhost;dbname=projet_pro';
             $user = 'root';
-            $pass = 'root';
+            $pass = '';
             try {
                 $db = new PDO($local, $user, $pass);
             } catch (PDOException $e) {
