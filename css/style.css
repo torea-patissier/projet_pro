@@ -1,3 +1,26 @@
+@import url('https://fonts.googleapis.com/css2?family=Dancing+Script:wght@700&display=swap');
+
+/* Pour garder un footer en bas de page */
 body {
-  background-color: red;
+    display: flex;
+    min-height: 100vh;
+    flex-direction: column;
+  }
+
+  main {
+    flex: 1 0 auto;
+  }
+/* Pour garder un footer en bas de page */
+
+/* Footer */
+.aFooter{
+color: white;
+}
+
+.txtIndex{
+  font-family: 'Dancing Script', cursive;
+}
+
+.divIndex1{
+  background-color: #A0AF81;
 }
