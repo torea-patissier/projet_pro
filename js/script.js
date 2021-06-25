@@ -11,3 +11,12 @@ function showHideAddProduct() {
     tableViewProducts.style.display = "none";
   }
 }
+
+function modifyProductsHideForms() {
+  const tableToHide = document.getElementById("tableProducts");
+  const modify = document.getElementById("modifyProduct");
+
+  modify.addEventListener("click", () => {
+    tableToHide.style.display = "none";
+  });
+}

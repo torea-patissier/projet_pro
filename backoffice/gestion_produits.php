@@ -35,18 +35,22 @@ $gestionProduits->DeleteProduit();
                         <div class="container">
                             <div class="row">
                                 <div class="input-field col s12 ">
-                                    <input type="text" name="productName" placeholder="Nom du produit">
+                                    <input type="text" name="productName" placeholder="Nom du produit" required>
                                 </div>
                                 <div class="input-field col s12 ">
-                                    <input type="text" name="productPrice" placeholder="Prix">
+                                    <input type="text" name="productPrice" placeholder="Prix" required>
+                                </div>
+                                
+                                <div class="input-field col s12 ">
+                                    <input type="text" name="productDescription" placeholder="Description" required>
                                 </div>
                                 <div class="input-field col s12 ">
-                                    <input type="text" name="productDescription" placeholder="Description">
+                                    <input type="text" name="productVolume" placeholder="Volume" required>
                                 </div>
                                 <div class="input-field col s12 ">
                                     <label>Catégorie du produit :</label><br /><br />
                                     <div class="input-field">
-                                        <select name="productCategory">
+                                        <select name="productCategory" required>
                                             <option value="" disabled selected>Catégorie :</option>
                                             <?php $gestionProduits->selectCategory(); ?>
                                         </select>
@@ -55,17 +59,17 @@ $gestionProduits->DeleteProduit();
                                 <div class="input-field col s12 ">
                                     <label>Sous catégorie du produit :</label><br /><br />
                                     <div class="input-field">
-                                        <select name="productSCategory">
+                                        <select name="productSCategory" required>
                                         <option value="" disabled selected>Sous catégorie :</option>
                                             <?php $gestionProduits->selectSCategory(); ?>
                                         </select><br /><br />
                                     </div>
                                 </div>
                                 <div class="input-field col s12 ">
-                                    <input type="text" name="productStock" placeholder="Produits en stock">
+                                    <input type="text" name="productStock" placeholder="Produits en stock" required>
                                 </div><br />
                                 <p class="left-align">Chemin vers image du produit :</p>
-                                <input type="file" name="Img"><br /><br />
+                                <input type="file" name="Img" required><br /><br />
                                 <input id="addProduct" class="btn black" type="submit" name="addProduct" value="Valider ✓">
                             </div>
                         </div>

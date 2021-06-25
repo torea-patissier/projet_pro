@@ -30,6 +30,7 @@ class backOffice extends bdd {
         $nomProduit = htmlspecialchars($_POST['productName']);
         $prixProduit = htmlspecialchars($_POST['productPrice']);
         $descriptionProduit = htmlspecialchars($_POST['productDescription']);
+        $volumeProduit = htmlspecialchars($_POST['productVolume']);
         $idCategorie = htmlspecialchars($_POST['productCategory']);
         $idSCategorie = htmlspecialchars($_POST['productSCategory']);
         $stockProduit = htmlspecialchars($_POST['productStock']);
@@ -99,9 +100,10 @@ class backOffice extends bdd {
         // <!-- POUR AFFICHER L'IMAGE ON A JUSTE A FAIRE DANS NOTRE BOUCLE D'AFFICHAGE <img src="../Images/php echo $result->nomProduit; .jpg"/>
 
         $con = $this->connectDb();
-        $req = $con->prepare("INSERT INTO produits(nom, description, prix, id_categorie, id_sous_categorie, stock) values (:nom, :description, :prix, :id_categorie, :id_sous_categorie, :stock)");
+        $req = $con->prepare("INSERT INTO produits(nom, description, prix, volume, id_categorie, id_sous_categorie, stock) values (:nom, :description, :prix, :volume, :id_categorie, :id_sous_categorie, :stock)");
         $req->bindValue("nom", $nomProduit, PDO::PARAM_STR);
         $req->bindValue("prix", $prixProduit, PDO::PARAM_STR);
+        $req->bindValue("volume", $volumeProduit, PDO::PARAM_STR);
         $req->bindValue("description", $descriptionProduit, PDO::PARAM_STR);
         $req->bindValue("id_categorie", $idCategorie, PDO::PARAM_INT);
         $req->bindValue("id_sous_categorie", $idSCategorie, PDO::PARAM_INT);
@@ -113,7 +115,7 @@ class backOffice extends bdd {
     function selectCategory()
     {
         $con = $this->connectDb(); // Connexion Db 
-        $stmt = $con->prepare("SELECT * FROM categories");// Requete
+        $stmt = $con->prepare("SELECT * FROM categories ORDER BY categorie ASC");// Requete
         $stmt->execute();//J'éxécute la requete
         $result = $stmt->fetchAll(PDO::FETCH_ASSOC);//Result devient un tableau des valeurs obtenues
             echo'ok';
@@ -122,15 +124,13 @@ class backOffice extends bdd {
             $idCategorie = $resultat["id"];
 
             echo "<option value='$idCategorie'>$categorie</option>";
-            var_dump($categorie);
-            var_dump($idCategorie);
         }
     }
 
     function selectSCategory()
     {
         $con = $this->connectDb(); // Connexion Db 
-        $stmt = $con->prepare("SELECT * FROM sous_categories");// Requete
+        $stmt = $con->prepare("SELECT * FROM sous_categories ORDER BY sous_categorie ASC");// Requete
         $stmt->execute();//J'éxécute la requete
         $result = $stmt->fetchAll();//Result devient un tableau des valeurs obtenues
 
@@ -152,13 +152,12 @@ class backOffice extends bdd {
 
         echo "<br /><br /><br />";
         echo "<div class='rox'>";
-        echo "<table class='responsive-table' ><thead>";
+        echo "<table id='tableProducts' class='responsive-table' ><thead>";
         echo "<th>Image Produit</th>";
         echo "<th>Nom Produit</th>";
         echo "<th>Prix Produit</th>";
+        echo "<th>Volume</th>";
         echo '<th class="hide-on-med-and-down">Description Produit</th>';
-        echo "<th>Id Catégorie</th>";
-        echo "<th>Id Sous Catégorie</th>";
         echo "<th>N° en Stock</th>";
         echo "</thead><tbody>";
         while($r = $request->fetch(PDO::FETCH_OBJ)){
@@ -168,11 +167,10 @@ class backOffice extends bdd {
             echo "<td><img src='../Images/" . addslashes($r->nom) .".jpg' width='100px' height='100px'/></td>";
             echo "<td>" . $r->nom . "</td>";
             echo "<td>" . $r->prix . "€</td>";
+            echo "<td>" . $r->volume . "</td>";
             echo "<td class='hide-on-med-and-down'>" . $r->description . "</td>";
-            echo "<td>" . $r->id_categorie . "</td>";
-            echo "<td>" . $r->id_sous_categorie . "</td>";
             echo "<td>" . $r->stock . "</td>";
-            echo "<td><a href='?show=" . $r->id . "'>Modifier</a><br/>";
+            echo "<td><a id='modifyProduct' href='?show=" . $r->id . "' onclick='modifyProductsHideForms();'>Modifier</a><br/>";
             echo "<a href='?action=delete&amp;id=" . $r->id . "'>Supprimer</a></td>";
             echo "</tr>";
         }
@@ -189,8 +187,8 @@ class backOffice extends bdd {
                     $req->bindValue("id", $id, PDO::PARAM_INT);
                     $req->execute(); 
                     header('location:http://localhost/projet_pro/backoffice/gestion_produits.php');
+                }
     }
-}
 
 
     function ModifierProduit()
@@ -215,21 +213,21 @@ class backOffice extends bdd {
             <form id='modifierArticle' class="col s12" action="" method="post">
                 <div class="input-field col s12 m4 l4">
                     <label>Titre :</label><br/><br />
-                    <input type="text" name="nom" value="<?php echo $s->nom;?>"><br/><br />
+                    <input type="text" name="nom" value="<?php echo $s->nom;?>" required><br/><br />
                 </div>
                 <div class="input-field col s12 m4 l4">
                 <label>Description :</label><br/><br />
-                <textarea name="description" rows="4" cols="50"><?php echo $s->description;?></textarea><br/><br />
+                <textarea name="description" rows="4" cols="50" required><?php echo $s->description;?></textarea><br/><br />
                 </div>
 
                 <div class="input-field col s12 m4 l4">
                 <label>Prix :</label><br/><br />
-                <input type="text" name="prix" value="<?php echo $s->prix;?>"><br/><br />
+                <input type="text" name="prix" value="<?php echo $s->prix;?>" required><br/><br />
                 </div>
 
                 <div class="input-field col s12 m4 l4">
                 <label>Stock :</label><br/><br />
-                <input type="text" name="stock" value="<?php echo $s->stock;?>"><br/><br />
+                <input type="text" name="stock" value="<?php echo $s->stock;?>" required><br/><br />
                 </div><br/>
 
                 <input class="btn black center-align" type="submit" name="envoyer" value="Modifier"><br/><br />
@@ -267,7 +265,107 @@ class backOffice extends bdd {
 
 
             }
+
+    
     }
+
+    function tableauClients() {
+
+    $con = $this->connectDb();
+    $request = $con -> prepare("SELECT * FROM utilisateurs");
+    $request -> execute(); 
+        while($r = $request->fetch(PDO::FETCH_OBJ)){
+            
+            
+            echo "<tr id ='$r->id'>";
+            echo "<td data-target='nom'>" . $r->nom . "</td>";
+            echo "<td data-target='prenom'>" . $r->prenom . "</td>";
+            echo "<td data-target='email'>" . $r->email . "€</td>";
+            echo "<td data-target='tel'>" . $r->tel . "</td>";
+            // echo "<td><a id='modifyProduct' href='?show=" . $r->id . "' onclick='modifyProductsHideForms();'>Modifier</a><br/>";
+            // echo "<a href='?action=delete&amp;id=" . $r->id . "'>Supprimer</a></td>";
+            echo "<td><a href='#' data-role='update' data-id='$r->id'> Update </a></td>";
+            echo "<td></td>";
+
+            echo "</tr>";
+        }
+
+    }
+
+    public function AfficherCategoriesBdd()
+    {
+        $con = $this->connectDb();
+        $req = $con->prepare("SELECT * FROM categories ORDER BY categorie ASC");
+        $req->execute();
+        $result = $req->fetchAll();
+
+        echo "<h2> Catégories : </h2>";
+        foreach ($result as $resultat) {
+
+            echo $resultat["categorie"] . ' ' . ' <a class="href_admin" href="gestion_categories.php?id=' . $resultat['id'] . '">' . ' <b>Supprimer</b>' . '</a>' . "<br />";
+        }
+
+        if (isset($_GET['id']) and !empty($_GET['id'])) {
+
+            $id = $_GET['id'];
+            $supp = $con->prepare("DELETE FROM categories WHERE id = :id ");
+            $supp->bindValue('id', $id, PDO::PARAM_INT);
+            $supp->execute();
+            header('location:http://localhost/projet_pro/backoffice/gestion_categories.php');
+        }
+    }
+
+    public function AfficherSCategoriesBdd()
+    {
+        $con = $this->connectDb();
+        $req = $con->prepare("SELECT * FROM sous_categories ORDER BY sous_categorie ASC");
+        $req->execute();
+        $result = $req->fetchAll();
+
+        echo "<h2> Sous Catégories : </h2>";
+        foreach ($result as $resultat) {
+            echo $resultat["sous_categorie"] . ' ' . ' <a class="href_admin" href="gestion_categories.php?id=' . $resultat['id'] . '">' . ' <b>Supprimer</b>' . '</a>' . "<br />";
+        }
+
+        if (isset($_GET['id']) and !empty($_GET['id'])) {
+
+            $id = $_GET['id'];
+            $supp = $con->prepare("DELETE FROM sous_categories WHERE id = :id ");
+            $supp->bindValue('id', $id, PDO::PARAM_INT);
+            $supp->execute();
+            header('location:http://localhost/projet_pro/backoffice/gestion_categories.php');
+        }
+    }
+
+
+
+    public function AjouterCategorieBdd()
+    {
+        $newCategorie = htmlspecialchars($_POST["newCategorie"]);
+        $con = $this->connectDb();
+        $req = $con->prepare("INSERT into categories (categorie) value (:newCategorie)");
+        $req->bindValue("newCategorie", $newCategorie, PDO::PARAM_STR);
+        $req->execute();
+    }
+
+    public function AjouterSCategorieBdd()
+    {
+        $con = $this->connectDb(); // Connexion Db 
+        $stmt = $con->prepare("SELECT * FROM sous_categories"); // Requete
+        $stmt->execute(); //J'éxécute la requete
+        $result = $stmt->fetchAll(); //Result devient un tableau des valeurs obtenues
+        $newSCategorie = htmlspecialchars($_POST["newSCategorie"]); //
+        foreach ($result as $resultat) {
+            if ($newSCategorie == $resultat['sous_categorie']) {
+                echo "La sous catégorie existe dejà en base de données";
+            }
+        }
+        $stmt = $con->prepare("INSERT INTO sous_categories (sous_categorie) values (:nom)");
+        $stmt->bindValue('nom', $newSCategorie, PDO::PARAM_STR);
+        $stmt->execute();
+    }
+
+
 
 
 }
