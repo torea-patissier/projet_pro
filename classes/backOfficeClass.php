@@ -337,8 +337,6 @@ class backOffice extends bdd {
         }
     }
 
-
-
     public function AjouterCategorieBdd()
     {
         $newCategorie = htmlspecialchars($_POST["newCategorie"]);
@@ -364,8 +362,212 @@ class backOffice extends bdd {
         $stmt->bindValue('nom', $newSCategorie, PDO::PARAM_STR);
         $stmt->execute();
     }
+                                    //!!!!!!!! DEBUT CLASSES GALERIE !!!!!!!//
+    public function addNewGaleryCategory(){
+
+        $newCategory = $_POST["newGaleryCategory"];
+
+        $con = $this->connectDb();
+        $request = $con->prepare("SELECT * FROM categories_galerie");
+        $request->execute();
+        $resultat = $request->fetchAll();
+
+        foreach($resultat as $result){
+            if($result["categorie"] === $newCategory){
+                return false;
+            }
+        }
+
+        $insertRequest = $con->prepare("INSERT INTO categories_galerie (categorie) VALUES (:newCategory)");
+        $insertRequest->bindValue("newCategory", $newCategory, PDO::PARAM_STR);
+        $insertRequest->execute();
+
+    }
+
+    public function showPhotoCategory(){
+
+        $con = $this->connectDb();
+        $request = $con->prepare("SELECT * FROM categories_galerie");
+        $request->execute();
+        $resultat = $request->fetchAll();
+
+        foreach($resultat as $result){
+//            $categorie = $result["categorie"];
+//            $idCategorie = $result["id"];
 
 
+            echo "<option value=" . $result['id'] . ">". $result['categorie'] . "</option>";
+        }
+    }
 
+    public function actualCategory(){
+
+        $con = $this->connectDb();
+        $request = $con->prepare("SELECT * FROM categories_galerie");
+        $request->execute();
+        $resultat = $request->fetchAll();
+
+        echo "<p> Categories galerie existantes : </p>";
+        foreach ($resultat as $result) {
+            echo $result["categorie"] . ' ' . ' <a class="href_admin" href="gestion_galerie.php?id=' . $result['id'] . '">' . ' <b>Supprimer</b>' . '</a>' . "<br />";
+        }
+
+        if (isset($_GET['id']) and !empty($_GET['id'])) {
+
+            $id = $_GET['id'];
+            $supp = $con->prepare("DELETE FROM categories_galerie WHERE id = :id ");
+            $supp->bindValue('id', $id, PDO::PARAM_INT);
+            $supp->execute();
+            header('location:http://localhost/projet_pro/backoffice/gestion_galerie.php');
+        }
+    }
+
+    public function newPhoto(){
+
+        $nomProduit = htmlspecialchars($_POST["nameNewPhoto"]); //On récupère le nom de la photo
+        $photoCategory = htmlspecialchars($_POST["categoriePhoto"]); //On récupère l'id de la catégorie de la photo
+
+        //Traitement de l'image
+
+        $Img = $_FILES["newPhoto"]["name"];
+        $img_Tmp = $_FILES["newPhoto"]["tmp_name"];
+
+        if(!empty($img_Tmp)){ //Si nom temporaire n'esst pas vide
+            $img_Name = explode(".", $Img); //On eleve le point du nom
+            $img_Ext = end($img_Name); //On attribue a img_Ext la valeur du dernier element du tableau
+
+            if(in_array(strtolower($img_Ext),array("png", "jpg", "jpeg")) === false){ //Si le dernier element ne correspond pas a ces type de fichier
+
+                echo "L'image insérée doit avoir pour extension : .png, .jpg, .jpeg"; //On affiche un message d'erreur
+
+            }else{ //Sinon
+
+                $img_Size = getimagesize($img_Tmp); //On attribue a la variable $img_Size la valeur du poids de l'image
+
+                if($img_Size["mime"] == "image/jpeg"){ //si l'extension d'image est egale a jpeg
+                    $img_Src = imagecreatefromjpeg($img_Tmp);
+
+                }else if ($img_Size["mime"] == "image/png"){ //si l'extension d'image est egale a png
+                    $img_Src = imagecreatefrompng($img_Tmp);
+
+                }else{
+                    $img_Src = false; //Source d'image = false
+                    echo "Veuillez rentrer une image valide"; //On affiche le message d'erreur comme quoi l'image n'est pas valide
+                }
+
+                if($img_Src !== false){ //Si l'image est au bon format
+
+                    $img_Width = 1000;
+
+                    if($img_Size[0] == $img_Width){
+
+                        $img_Finale = $img_Src;
+                    }else{
+                        $new_Width[0] = $img_Width;
+                        $new_Heigth[1] = 1000;
+                        $img_Finale = imagecreatetruecolor($new_Width[0], $new_Heigth[1]);
+                        imagecopyresampled($img_Finale, $img_Src, 0, 0, 0, 0, $new_Width[0], $new_Heigth[1], $img_Size[0], $img_Size[1]);
+                    }
+                    imagejpeg($img_Finale, "../Images_Galerie/" . addslashes($nomProduit). ".jpg");
+                }
+            }
+        }else{
+            echo "Veuillez insérer une image.";
+        }
+
+        //Fin du traitement de l'image
+        // <!-- POUR AFFICHER L'IMAGE ON A JUSTE A FAIRE DANS NOTRE BOUCLE D'AFFICHAGE <img src="../Images/php echo $result->nomProduit; .jpg"/>
+
+            $con = $this->connectDb();
+            $request = $con->prepare("INSERT INTO images_galerie(nom_image, id_categorie) VALUES (:nom, :id_categorie)");
+            $request->bindValue("nom", $nomProduit, PDO::PARAM_STR);
+            $request->bindValue("id_categorie", $photoCategory, PDO::PARAM_INT);
+            $request->execute();
+    }
+
+    public function carouselPhotosEnfant(){
+
+        $con = $this->connectDb();
+        $request = $con->prepare("SELECT * FROM images_galerie");
+        $request->execute();
+        $resultat = $request->fetchAll();
+
+        foreach($resultat as $result){
+            ?>
+            <img class="carousel-item" src="../Images_Galerie/<?php echo $result['nom_image'] ?>.jpg" alt="image coupe"><a href="gestion_galerie.php?id=<?php echo $result['id'] ?>">X</a>
+            <?php
+        }
+
+        if (isset($_GET['id']) and !empty($_GET['id'])) {
+
+            $id = $_GET['id'];
+            $supp = $con->prepare("DELETE FROM images_galerie WHERE id = :id ");
+            $supp->bindValue('id', $id, PDO::PARAM_INT);
+            $supp->execute();
+            header('location:http://localhost/projet_pro/backoffice/gestion_galerie.php');
+        }
+    }
+
+    public function carouselPhotosExtensions(){
+
+        $con = $this->connectDb();
+        $request = $con->prepare("SELECT * FROM categories_galerie WHERE categorie = 'Extensions'");
+        $request->execute();
+        $resultat = $request->fetchAll();
+
+        foreach($resultat as $result){
+            $idCategorie = $result['id'];
+        }
+       // var_dump($idCategorie);
+
+        $requestPhotos = $con->prepare("SELECT * FROM images_galerie WHERE id_categorie = '$idCategorie'");
+        $requestPhotos->execute();
+        $resultatPhotos = $requestPhotos->fetchAll();
+
+       // var_dump($resultatPhotos);
+
+        foreach($resultatPhotos as $resultFetch){
+            ?>
+            <a class="carousel-item" href="gestion_galerie.php?id=<?php echo $resultFetch['id'] ?>">X <img src="../Images_Galerie/<?php echo $resultFetch['nom_image'] ?>.jpg" alt="image coupe"></a>
+            <?php
+        }
+    }
+
+    public function viewAllPhotos()
+    {
+        $con = $this->connectDb();
+        $request = $con->prepare("SELECT * FROM `images_galerie` INNER JOIN categories_galerie ON images_galerie.id_categorie = categories_galerie.id");
+        $request->execute();
+
+        echo "<br /><br /><br />";
+        echo "<div class='row'>";
+        echo "<table id='tableProducts' class='responsive-table' ><thead>";
+        echo "<th>Image</th>";
+        echo "<th>Catégorie de l'image</th>";
+        echo "</thead><tbody>";
+
+        while($r = $request->fetch(PDO::FETCH_OBJ)){
+
+            echo "<tr>";
+            echo "<td><img src='../Images_Galerie/" . addslashes($r->nom_image) .".jpg' width='100px' height='100px'/></td>";
+            echo "<td>" . $r->categorie. "</td>";
+            echo "<td><a href='?action=delete&amp;id=" . $r->id . "'>Supprimer</a></td>";
+            echo "</tr>";
+        }
+        echo "</tbody></table></div>";
+    }
+
+    function deletePhoto(){
+        $con = $this->connectDb();
+
+        // Supprimer un article de la Bdd
+        if(isset($_GET['action'])&&($_GET['action']== 'delete')){
+            $id = htmlspecialchars($_GET['id']);
+            $req = $con->prepare("DELETE FROM images_galerie WHERE id = :id ");
+            $req->bindValue("id", $id, PDO::PARAM_INT);
+            $req->execute();
+            header('location:http://localhost/projet_pro/backoffice/gestion_galerie.php');
+        }
+    }
 
 }
