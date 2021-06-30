@@ -13,7 +13,6 @@ if(isset($_POST["addProduct"])){
 }
 
 if (isset($_GET['show'])) {
-
     $gestionProduits->ModifierProduit();
 }
 
@@ -21,14 +20,18 @@ $gestionProduits->DeleteProduit();
 ?>
 
 
-<main>
+<main id="mainProduits">
     <div class="container fluid center-align">
         <h1> Gestion des produits </h1>
-        <p>Sur cet interfance vous pourrez ajouter, modifier ou encore surprimmer les articles disponibles sur votre espace Boutique </p>
-        <div class="btnProduits">
-            <button id="toggleAddProduct" class="btn black" onclick="showHideAddProduct();">Ajouter un produit</button>
+        <div id="divAjouterProduit">
+            <p>Sur cet interfance vous pourrez ajouter, modifier ou encore surprimmer les articles disponibles sur votre espace Boutique </p>
+            <div class="btnProduits">
+                <button class="btn black"> <a class="btnHref" href="http://localhost/projet_pro/backoffice/backoffice.php">Retour</a></button>
+                <button id="toggleAddProduct" class="btn black" onclick="showHideAddProduct();">Ajouter un produit</button>
+            </div>
         </div>
                 <div id="formAddProduct" style="display: none;">
+                    <button class="btn black"><a class="btnHref" href="http://localhost/projet_pro/backoffice/gestion_produits?page=1.php">Retour</a></button>
                     <p>Avec ce formulaire vous pouvez ajouter un produit à votre page Boutique.<br />
                     En cas d'erreur il est possible de le supprimer dans l'onglet "Liste des produits"</p>
                     <form action="" method="POST" enctype="multipart/form-data">
@@ -78,7 +81,7 @@ $gestionProduits->DeleteProduit();
 
                 
                 <div id="tableProduct">
-                   <?php $gestionProduits -> viewAllProduits(); ?>
+                   <?php $gestionProduits -> paginationProduits(); ?>
                 </div>
         
     </div>

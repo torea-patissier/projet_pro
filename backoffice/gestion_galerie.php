@@ -10,24 +10,28 @@ $gestionGalerie = new backOffice;
 
     if(isset($_POST["sendNewGaleryCategory"]) && !empty($_POST["newGaleryCategory"])){
         $gestionGalerie->addNewGaleryCategory();
-        header('location:http://localhost/projet_pro/backoffice/gestion_galerie.php');
+        header('location:http://localhost/projet_pro/backoffice/gestion_galerie?page=1.php');
     }
 
     if(isset($_POST["sendNewGaleryPhoto"]) && !empty($_POST["nameNewPhoto"])){
         $gestionGalerie->newPhoto();
-        header('location:http://localhost/projet_pro/backoffice/gestion_galerie.php');
+        header('location:http://localhost/projet_pro/backoffice/gestion_galerie?page=1.php');
     }
 
     $gestionGalerie->deletePhoto();
+
+
 ?>
 <main>
     <div class="container fluid center-align">
         <h1>Gestion galerie photos</h1>
         <div class="container">
             <div class="row">
-                <div id="photosGalerie">
-                    <?php $gestionGalerie->viewAllPhotos(); ?>
-                </div>
+                <div id="results_box"></div>
+                <div id="pagination_controls"></div>
+                   <div id="photosGalerie">
+                        <?php $gestionGalerie->paginationGalerie(); ?>
+                    </div>
                 <div class="col s12 m12 l12">
                     <form action="" method="POST" name="formPhotoGalery" enctype="multipart/form-data">
                         <div class="container">

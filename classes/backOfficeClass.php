@@ -7,7 +7,7 @@ class backOffice extends bdd {
     function buttonsBackoffice(){
 
         if(isset($_POST["btn_produits"])){
-            header('Location: http://localhost/projet_pro/backoffice/gestion_produits.php');
+            header('Location: http://localhost/projet_pro/backoffice/gestion_produits?page=1.php');
         }
 
         if(isset($_POST["btn_clients"])){
@@ -15,7 +15,7 @@ class backOffice extends bdd {
         }
 
         if(isset($_POST["btn_galerie"])){
-            header('Location: http://localhost/projet_pro/backoffice/gestion_galerie.php');
+            header('Location: http://localhost/projet_pro/backoffice/gestion_galerie?page=1.php');
         }
 
         if(isset($_POST["btn_categories"])){
@@ -86,8 +86,8 @@ class backOffice extends bdd {
                         imagecopyresampled($img_Finale, $img_Src, 0, 0, 0, 0, $new_Width[0], $new_Height[1], $img_Size[0], $img_Size[1]);
 
                     }
-
-                    imagejpeg($img_Finale, "../Images/" .addslashes($nomProduit). ".jpg");
+                    $encName = md5(uniqid());
+                    imagejpeg($img_Finale, "../Images/" . $encName . ".jpg");
                 }
             }
 
@@ -100,7 +100,7 @@ class backOffice extends bdd {
         // <!-- POUR AFFICHER L'IMAGE ON A JUSTE A FAIRE DANS NOTRE BOUCLE D'AFFICHAGE <img src="../Images/php echo $result->nomProduit; .jpg"/>
 
         $con = $this->connectDb();
-        $req = $con->prepare("INSERT INTO produits(nom, description, prix, volume, id_categorie, id_sous_categorie, stock) values (:nom, :description, :prix, :volume, :id_categorie, :id_sous_categorie, :stock)");
+        $req = $con->prepare("INSERT INTO produits(nom, description, prix, volume, id_categorie, id_sous_categorie, stock, image_nom) values (:nom, :description, :prix, :volume, :id_categorie, :id_sous_categorie, :stock, :encname)");
         $req->bindValue("nom", $nomProduit, PDO::PARAM_STR);
         $req->bindValue("prix", $prixProduit, PDO::PARAM_STR);
         $req->bindValue("volume", $volumeProduit, PDO::PARAM_STR);
@@ -108,6 +108,7 @@ class backOffice extends bdd {
         $req->bindValue("id_categorie", $idCategorie, PDO::PARAM_INT);
         $req->bindValue("id_sous_categorie", $idSCategorie, PDO::PARAM_INT);
         $req->bindValue("stock", $stockProduit, PDO::PARAM_INT);
+        $req->bindValue("encname", $encName, PDO::PARAM_STR);
         
         $req->execute();
     }
@@ -170,7 +171,7 @@ class backOffice extends bdd {
             echo "<td>" . $r->volume . "</td>";
             echo "<td class='hide-on-med-and-down'>" . $r->description . "</td>";
             echo "<td>" . $r->stock . "</td>";
-            echo "<td><a id='modifyProduct' href='?show=" . $r->id . "' onclick='modifyProductsHideForms();'>Modifier</a><br/>";
+            echo "<td><a id='modifyProduct' href='?show=" . $r->id . "' onclick='toggleModifProduits();'>Modifier</a><br/>";
             echo "<a href='?action=delete&amp;id=" . $r->id . "'>Supprimer</a></td>";
             echo "</tr>";
         }
@@ -186,7 +187,7 @@ class backOffice extends bdd {
                     $req = $con->prepare("DELETE FROM produits WHERE id = :id ");
                     $req->bindValue("id", $id, PDO::PARAM_INT);
                     $req->execute(); 
-                    header('location:http://localhost/projet_pro/backoffice/gestion_produits.php');
+                    header('location:http://localhost/projet_pro/backoffice/gestion_produits?page=1.php');
                 }
     }
 
@@ -206,8 +207,8 @@ class backOffice extends bdd {
             <br /><br /><br />
                 <div class="container">
                     <div class="center-align">
-                        <img class="hide-on-small-only" src="../Images/<?php echo $s->nom;?>.jpg" width="500px" height="500px"/><br/><br/>
-                        <img class="hide-on-med-and-up" src="../Images/<?php echo $s->nom;?>.jpg" width="290px" height="290px"/><br/><br/>
+                        <img class="hide-on-small-only" src="../Images/<?php echo $s->image_nom;?>.jpg" width="500px" height="500px"/><br/><br/>
+                        <img class="hide-on-med-and-up" src="../Images/<?php echo $s->image_nom;?>.jpg" width="290px" height="290px"/><br/><br/>
                     </div>
             <div class="row">
             <form id='modifierArticle' class="col s12" action="" method="post">
@@ -258,15 +259,10 @@ class backOffice extends bdd {
 
                 //REFRESH / HEADER LOCATION AVEC JAVASCRIPT
                 $gestionProduits = new backOffice;
-                echo '<script language="Javascript"> document.location.replace("http://localhost/projet_pro/backoffice/gestion_produits.php"); </script>';
+                echo '<script language="Javascript"> document.location.replace("http://localhost/projet_pro/backoffice/gestion_produits?page=1.php"); </script>';
                 $gestionProduits -> viewAllProduits();
 
-
-
-
             }
-
-    
     }
 
     function tableauClients() {
@@ -418,7 +414,7 @@ class backOffice extends bdd {
             $supp = $con->prepare("DELETE FROM categories_galerie WHERE id = :id ");
             $supp->bindValue('id', $id, PDO::PARAM_INT);
             $supp->execute();
-            header('location:http://localhost/projet_pro/backoffice/gestion_galerie.php');
+            header('location:http://localhost/projet_pro/backoffice/gestion_galerie?page=1.php');
         }
     }
 
@@ -468,7 +464,9 @@ class backOffice extends bdd {
                         $img_Finale = imagecreatetruecolor($new_Width[0], $new_Heigth[1]);
                         imagecopyresampled($img_Finale, $img_Src, 0, 0, 0, 0, $new_Width[0], $new_Heigth[1], $img_Size[0], $img_Size[1]);
                     }
-                    imagejpeg($img_Finale, "../Images_Galerie/" . addslashes($nomProduit). ".jpg");
+
+                    $encName = md5(uniqid());
+                    imagejpeg($img_Finale, "../Images_Galerie/" . $encName . ".jpg");
                 }
             }
         }else{
@@ -479,9 +477,10 @@ class backOffice extends bdd {
         // <!-- POUR AFFICHER L'IMAGE ON A JUSTE A FAIRE DANS NOTRE BOUCLE D'AFFICHAGE <img src="../Images/php echo $result->nomProduit; .jpg"/>
 
             $con = $this->connectDb();
-            $request = $con->prepare("INSERT INTO images_galerie(nom_image, id_categorie) VALUES (:nom, :id_categorie)");
+            $request = $con->prepare("INSERT INTO images_galerie(nom_image, id_categorie, enc_name) VALUES (:nom, :id_categorie, :encname)");
             $request->bindValue("nom", $nomProduit, PDO::PARAM_STR);
             $request->bindValue("id_categorie", $photoCategory, PDO::PARAM_INT);
+            $request->bindValue("encname", $encName, PDO::PARAM_STR);
             $request->execute();
     }
 
@@ -504,7 +503,7 @@ class backOffice extends bdd {
             $supp = $con->prepare("DELETE FROM images_galerie WHERE id = :id ");
             $supp->bindValue('id', $id, PDO::PARAM_INT);
             $supp->execute();
-            header('location:http://localhost/projet_pro/backoffice/gestion_galerie.php');
+            header('location:http://localhost/projet_pro/backoffice/gestion_galerie?page=1.php');
         }
     }
 
@@ -536,7 +535,7 @@ class backOffice extends bdd {
     public function viewAllPhotos()
     {
         $con = $this->connectDb();
-        $request = $con->prepare("SELECT * FROM `images_galerie` INNER JOIN categories_galerie ON images_galerie.id_categorie = categories_galerie.id");
+        $request = $con->prepare("SELECT * FROM `images_galerie` INNER JOIN categories_galerie ON images_galerie.id_categorie = categories_galerie.id LIMIT 0,5");
         $request->execute();
 
         echo "<br /><br /><br />";
@@ -566,8 +565,154 @@ class backOffice extends bdd {
             $req = $con->prepare("DELETE FROM images_galerie WHERE id = :id ");
             $req->bindValue("id", $id, PDO::PARAM_INT);
             $req->execute();
-            header('location:http://localhost/projet_pro/backoffice/gestion_galerie.php');
+            header('location:http://localhost/projet_pro/backoffice/gestion_galerie?page=1.php');
+        }
+    }
+                  //    !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
+    public function paginationGalerie()
+    {
+        //Connexion Bdd
+        $con = $this->connectDb();
+        $page = intval($_GET['page']); //conversion forcée en entier
+        //Si le nombre est invalide, on demande la première page par défaut
+        if ($page <= 0) {
+            $page = 1;
+        }
+
+        $limite = 5;
+
+        $resultFoundRows = $con->query("SELECT count(id) FROM images_galerie");
+        $nombreElementsTotal = $resultFoundRows->fetchColumn();
+        $debut = ($page - 1) * $limite;
+        // Partie "Requête"
+        //  On construit la requête, en remplaçant les valeurs par des marqueurs. Ici, on
+        //  n'a qu'une valeur, limite. On place donc un marqueur là où la valeur devrait se
+        //  trouver, sans oublier les deux points « : »
+
+        $query = $con->prepare("SELECT * FROM images_galerie INNER JOIN categories_galerie ON images_galerie.id_categorie = categories_galerie.id LIMIT :limite OFFSET :debut");
+        //On lie les valeurs
+        $query->bindValue('limite', $limite, PDO::PARAM_INT);
+        $query->bindValue('debut', $debut, PDO::PARAM_INT);
+        $query->execute();
+
+        echo "<br /><br /><br />";
+        echo "<div class='row'>";
+        echo "<table id='tableProducts' class='responsive-table' ><thead>";
+        echo "<th>Image</th>";
+        echo "<th>Catégorie de l'image</th>";
+        echo "</thead><tbody>";
+
+        while($r = $query->fetch(PDO::FETCH_OBJ)){
+
+            echo "<tr>";
+            echo "<td><img src='../Images_Galerie/" . $r->enc_name . ".jpg' width='100px' height='100px'/></td>";
+            echo "<td>" . $r->categorie . "</td>";
+            echo "<td><a href='?action=delete&amp;id=" . $r->id . "'>Supprimer</a></td>";
+            echo "</tr>";
+        }
+        echo "</tbody></table></div>";
+
+        //On calcule le nombre de pages
+        $nombreDePages = ceil($nombreElementsTotal / $limite);
+
+        /* Si on est sur la première page, on n'a pas besoin d'afficher de lien*/
+        /* vers la précédente. On va donc ne l'afficher que si on est sur une autre*/
+        /* page que la première*/
+
+        if ($page > 1) :
+            ?><button class="btn black"><a href="?page=<?php echo $page - 1; ?>">Page précédente</a></button>
+        <?php endif;
+
+        for ($i = 1; $i <= $nombreDePages; $i++) :
+            ?><u><a href="?page=<?php echo $i; ?>"><?php echo $i; ?></a></u>
+        <?php endfor;
+
+        //Avec le nombre total de pages, on peut aussi masquer le lien vers la page sivante quand on est sur la derniere//
+        if ($page < $nombreDePages) :
+            ?><button class="btn black s"><a href="?page=<?php echo $page + 1; ?>">Page suivante</a></button>
+        <?php endif; ?><?php
+    }
+
+    function encCode(){
+        $i = 0;
+
+        while($i != 20){
+            echo md5(uniqid()) . "<br />";
+            $i++;
         }
     }
 
+
+    public function paginationProduits()
+    {
+        //Connexion Bdd
+        $con = $this->connectDb();
+        $page = intval($_GET['page']); //conversion forcée en entier
+        //Si le nombre est invalide, on demande la première page par défaut
+        if ($page <= 0) {
+            $page = 1;
+        }
+
+        $limite = 5;
+
+        $resultFoundRows = $con->query("SELECT count(id) FROM produits");
+        $nombreElementsTotal = $resultFoundRows->fetchColumn();
+        $debut = ($page - 1) * $limite;
+        // Partie "Requête"
+        //  On construit la requête, en remplaçant les valeurs par des marqueurs. Ici, on
+        //  n'a qu'une valeur, limite. On place donc un marqueur là où la valeur devrait se
+        //  trouver, sans oublier les deux points « : »
+
+        $query = $con->prepare("SELECT * FROM produits LIMIT :limite OFFSET :debut");
+        //On lie les valeurs
+        $query->bindValue('limite', $limite, PDO::PARAM_INT);
+        $query->bindValue('debut', $debut, PDO::PARAM_INT);
+        $query->execute();
+
+        echo "<br /><br /><br />";
+        echo "<div class='rox'>";
+        echo "<table id='tableProducts' class='responsive-table' ><thead>";
+        echo "<th>Image Produit</th>";
+        echo "<th>Nom Produit</th>";
+        echo "<th>Prix Produit</th>";
+        echo "<th>Volume</th>";
+        echo '<th class="hide-on-med-and-down">Description Produit</th>';
+        echo "<th>N° en Stock</th>";
+        echo "</thead><tbody>";
+
+        while($r = $query->fetch(PDO::FETCH_OBJ)){
+
+            echo "<tr>";
+            echo "<td><img src='../Images/" . $r->image_nom .".jpg' width='100px' height='100px'/></td>";
+            echo "<td>" . $r->nom . "</td>";
+            echo "<td>" . $r->prix . "€</td>";
+            echo "<td>" . $r->volume . "</td>";
+            echo "<td class='hide-on-med-and-down'>" . $r->description . "</td>";
+            echo "<td>" . $r->stock . "</td>";
+            echo "<td><a id='modifyProduct' href='?show=" . $r->id . "' onclick='modifyProductsHideForms();'>Modifier</a><br/>";
+            echo "<a href='?action=delete&amp;id=" . $r->id . "'>Supprimer</a></td>";
+            echo "</tr>";
+        }
+        echo "</tbody></table></div>";
+
+        //On calcule le nombre de pages
+        $nombreDePages = ceil($nombreElementsTotal / $limite);
+
+        /* Si on est sur la première page, on n'a pas besoin d'afficher de lien*/
+        /* vers la précédente. On va donc ne l'afficher que si on est sur une autre*/
+        /* page que la première*/
+
+        if ($page > 1) :
+            ?><button class="btn black"><a href="?page=<?php echo $page - 1; ?>">Page précédente</a></button>
+        <?php endif;
+
+        for ($i = 1; $i <= $nombreDePages; $i++) :
+            ?><u><a href="?page=<?php echo $i; ?>"><?php echo $i; ?></a></u>
+        <?php endfor;
+
+        //Avec le nombre total de pages, on peut aussi masquer le lien vers la page sivante quand on est sur la derniere//
+        if ($page < $nombreDePages) :
+            ?><button class="btn black s"><a href="?page=<?php echo $page + 1; ?>">Page suivante</a></button>
+        <?php endif; ?><?php
+    }
 }

@@ -36,6 +36,7 @@ if (isset($_POST["valider"])) {
     echo "</div>";
     ?>
     <br /><br />
+
     <form name="Ajouter_Catégorie" action="" id="formcategorie" method="POST">
         <div class="container">
             <div class="row">
