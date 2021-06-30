@@ -5,8 +5,13 @@
                 <h5 class="white-text center-align">Marika coiffure</h5>
                 <li class="divider"></li>
                 <ul>
+<<<<<<< Updated upstream
                 <li class="col s6 l3 right-align"><a class="grey-text text-lighten-3" href="https://www.instagram.com/marika.coiffure/"><img src="images/instagram.png"></a></li>
                 <li class="col s6 l3"><a class="grey-text text-lighten-3" href="https://www.facebook.com/MarikaCoiffureCalvi"><img src="images/facebook.png"></a></li>
+=======
+                <li class="col s6 l6"><a class="grey-text text-lighten-3" href="https://www.instagram.com/marika.coiffure/"><img src="images/instagram.png"></a></li>
+                <li class="col s6 l6"><a class="grey-text text-lighten-3" href="https://www.facebook.com/MarikaCoiffureCalvi"><img src="images/facebook.png"></a></li>
+>>>>>>> Stashed changes
                 </ul>
             </div>
 
@@ -19,7 +24,11 @@
             <div class="col l3 m6 s12">
                 <h5 class="white-text center-align">Liens</h5>
                 <li class="divider"></li>
+<<<<<<< Updated upstream
                 <p class="center-align">Lien à venir</p>
+=======
+                <p class="center-align"><a class="aFooter" href="mentions/mentions.php">Mentions légale</a></p>
+>>>>>>> Stashed changes
             </div>
             
             <div class="col l3 m6 s12">

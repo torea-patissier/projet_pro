@@ -19,7 +19,11 @@
             <div class="col l3 m6 s12">
                 <h5 class="white-text center-align">Liens</h5>
                 <li class="divider"></li>
+<<<<<<< Updated upstream
                 <p class="center-align">Lien à venir</p>
+=======
+                <p class="center-align"><a class="aFooter" href="../mentions/mentions.php">Mentions légale</a></p>
+>>>>>>> Stashed changes
             </div>
             
             <div class="col l3 m6 s12">

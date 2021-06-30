@@ -1,5 +1,8 @@
 <<<<<<< Updated upstream
+<<<<<<< Updated upstream
 =======
+=======
+>>>>>>> Stashed changes
 <?php
 require_once('dbClass.php');
 class users extends bdd
@@ -220,5 +223,9 @@ class users extends bdd
         echo $tel;
     }
 }
+<<<<<<< Updated upstream
+?>
+>>>>>>> Stashed changes
+=======
 ?>
 >>>>>>> Stashed changes

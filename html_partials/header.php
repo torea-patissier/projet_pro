@@ -39,9 +39,16 @@
 
                         ?><li><a href="../users/connexion.php">Connexion</a></li> <?php
                     }
+<<<<<<< Updated upstream
                     if(isset($_SESSION['user']['id_droits']) === 20260){
 
                         ?> <li><a href="#">Admin</a></li> <?php
+=======
+
+                    if(($_SESSION['user']['id_droits']) == 20260){
+
+                        ?> <li><a href="../backoffice/backoffice.php">Admin</a></li> <?php
+>>>>>>> Stashed changes
                     }
                 
                     ?>
@@ -50,9 +57,12 @@
                 </ul>
             </div>
         </nav>
+<<<<<<< Updated upstream
         <div class="input-field container">
             <input id="search" type="search" required>
             <label class="label-icon" for="search"><i class="material-icons">search</i></label>
             <i class="material-icons">close</i>
         </div>
+=======
+>>>>>>> Stashed changes
     </header>

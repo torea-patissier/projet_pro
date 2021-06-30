@@ -6,6 +6,7 @@ body {
     min-height: 100vh;
     flex-direction: column;
   }
+<<<<<<< Updated upstream
 
   main {
     flex: 1 0 auto;
@@ -24,3 +25,52 @@ color: white;
 .divIndex1{
   background-color: #A0AF81;
 }
+=======
+
+  main {
+    flex: 1 0 auto;
+  }
+/* Pour garder un footer en bas de page */
+
+/* Liens Footer */
+.aFooter{
+color: white;
+}
+
+/* Navbar & Footer */
+nav, .page-footer{
+  background-color: #88A97A;
+}
+
+a{
+  color: black;
+}
+
+/* I.N.D.E.X */
+/* H2 index */
+.h2Index{
+  display: flex;
+  justify-content: space-between;
+}
+/* Police Index */
+.txtIndex{ 
+  font-family: 'Dancing Script', cursive;
+}
+/* Couleur de la div0 */
+.divIndex0{
+  background-color: #88A97A;
+}
+/* Couleur de la div1 */
+.divIndex1{
+  background-color: #A0AF81;
+}
+/* Parallax Index */
+.parallax{ 
+  transform: translateY(250px);
+}
+
+.coco{
+  display: flex;
+  justify-content:row;
+}
+>>>>>>> Stashed changes
