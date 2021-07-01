@@ -1,30 +1,11 @@
-<<<<<<< Updated upstream
-//Initialise automatique toutes les classes de Materialize
-M.AutoInit();
-
-
-
-$(document).ready(function(){
-    $("#modifier").click(function(){
-        if("#password" == "#confpass"){
-            alert('Votre mot de passe à bien été modifié');
-        }else{
-            alert("Les mots de passe ne sont pas identique");
-        }
-    })
-})
-
-=======
 M.AutoInit(); // Permet de charger toutes les animations JS de Materialize
 
 $(document).ready(function () {
-  function showdata() {
-    //  Fonction pour afficher les commentaires sur INDEX.HTML de façon Asynchrone
+  function showdata() {//  Fonction pour afficher les commentaires sur INDEX.HTML de façon Asynchrone
 
     $.ajax({
       url: "action.php", // Récupère les résultats de echo $pageAction->voirAvisClients();
-      success: function (result) {
-        // result == résultat PHP
+      success : function (result) { // result == résultat PHP
         data = JSON.parse(result); // data == result sous format JSON
         //console.log(data); // On peut console result pour voir le format de result dans la console
         //console.log(result); // On peut console data pour voir le format de data dans la console
@@ -32,7 +13,7 @@ $(document).ready(function () {
         data.forEach((result) => {
           // Boucle for each en Jquery
           $("#afficherCommentaire").append(
-            `<p>'${result.avis}' <br/> ${result.prenom} ${result.nom} le ${result.date}</p>`
+            `<p>${result.avis} <br/> ${result.prenom} ${result.nom}</p>`
           );
         });
       },
@@ -40,6 +21,8 @@ $(document).ready(function () {
   }
   showdata();
 });
+
+
 
 //Backoffice
 function showHideAddProduct() {
@@ -86,4 +69,3 @@ function modifyProductsHideForms() {
 //         }
 //     })
 // })
->>>>>>> Stashed changes

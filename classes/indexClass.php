@@ -3,7 +3,7 @@ require_once('dbClass.php');
 class index extends bdd
 {
 
-    public function envoyerCommentaire($avisClient)
+    public function envoyerCommentaire($avisClient) // Envoi un commentaire en Bdd
     {
 
         $con = $this->connectDb();
@@ -11,10 +11,9 @@ class index extends bdd
         $id_client = $_SESSION['user']['id'];
         $req = $con->prepare("INSERT INTO `avis`( `date`, `id_client`, `avis`) VALUES ('$date' , '$id_client' , '$avisClient' )");
         $req->execute();
-        return json_encode($req);
     }
 
-    public function voirAvisClients()
+    public function voirAvisClients() // Affiche les avis des clients
     {
 
         $con = $this->connectDb();
@@ -25,16 +24,23 @@ class index extends bdd
         return json_encode($resultat); // Converti le resultat php en JSON pour l'afficher sur l'Index en Asynchrone
     }
 
-    public function recherche()
+    public function voirDerniersArticles() // Voi les 3 derniers articles en Bdd
+    {
+        $con = $this->connectDb();
+        $req = $con->prepare("SELECT * FROM produits ORDER BY id DESC limit 0,3");
+        $req->execute();
+    }
+
+    public function recherche() // Barre de recherche 
     {
 
 ?>
-        <form method="GET">
-            <input type="search" name="q" placeholder="Recherche..." />
-            <input class="btn black" type="submit" value="Valider" /><br />
-        </form><br />
+<form method="GET">
+    <input type="search" name="q" placeholder="Recherche..." />
+    <input class="btn black" type="submit" value="Valider" /><br />
+</form><br />
 
-        <?php
+<?php
         $con = $this->connectDb();
         $articles = $con->query('SELECT * FROM produits ORDER BY id DESC');
 
@@ -54,13 +60,13 @@ class index extends bdd
             while ($a = $articles->fetch()) {
 
                 if (!empty($q)) { ?>
-                
-                    <div class="produitRecherche">
-                        <a href="../boutique/produits.php?show=<?= $a['nom'] ?>"><br />
-                            <img src="Images/<?= $a['nom'] ?>.jpg" width="100px" height="100px"><br />
-                            <?= $a['nom']; ?> <br />
-                            <?= $a['prix']; ?> € <br /></a>
-                    </div>
+
+<div class="produitRecherche">
+    <a href="../boutique/produits.php?show=<?= $a['nom'] ?>"><br />
+        <img src="Images/<?= $a['nom'] ?>.jpg" width="100px" height="100px"><br />
+        <?= $a['nom']; ?> <br />
+        <?= $a['prix']; ?> € <br /></a>
+</div>
 <?php
                 }
             }

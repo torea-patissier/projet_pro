@@ -8,7 +8,6 @@ if($_SESSION){
     header('Location:http://localhost:8888/projet_pro/index.php');
 }
 
-
 if (isset($_POST["inscription"])) {
     $pageInscription->register();
 }
@@ -20,7 +19,7 @@ if (isset($_POST["inscription"])) {
         <div class="container">
             <h1 class="center-align">Inscription</h1><br/><br/>
             <div class="row">
-                <div class="col col s12 m6 l6">
+                <div class="col col s6 m6 l6">
                     <label>Nom</label><br /><br />
                     <input type="text" name="iNom" id="iNom" value="<?php if($_POST)echo $_POST['iNom'];?>" autofocus required><br /><br />
                     <label>Prenom</label><br /><br />
@@ -29,7 +28,7 @@ if (isset($_POST["inscription"])) {
                     <input type="email" name="iEmail" id="iEmail" value="<?php if($_POST)echo $_POST['iEmail'];?>" required><br /><br />
                 </div>
 
-                <div class="col col s12 m6 l6">
+                <div class="col col s6 m6 l6">
                     <label>Tel</label><br /><br />
                     <input type="tel" name="iTel" id="iTel" value="<?php if($_POST)echo $_POST['iTel'];?>" required><br /><br />
                     <label>Mot de passe</label><br /><br />

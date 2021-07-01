@@ -6,26 +6,6 @@ body {
     min-height: 100vh;
     flex-direction: column;
   }
-<<<<<<< Updated upstream
-
-  main {
-    flex: 1 0 auto;
-  }
-/* Pour garder un footer en bas de page */
-
-/* Footer */
-.aFooter{
-color: white;
-}
-
-.txtIndex{
-  font-family: 'Dancing Script', cursive;
-}
-
-.divIndex1{
-  background-color: #A0AF81;
-}
-=======
 
   main {
     flex: 1 0 auto;
@@ -44,6 +24,12 @@ nav, .page-footer{
 
 a{
   color: black;
+}
+
+/* 404 */
+.main404{
+  background-image: url(../images/image404.jpg);
+  color: #ffff;
 }
 
 /* I.N.D.E.X */
@@ -73,4 +59,3 @@ a{
   display: flex;
   justify-content:row;
 }
->>>>>>> Stashed changes

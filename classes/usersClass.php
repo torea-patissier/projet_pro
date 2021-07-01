@@ -1,8 +1,3 @@
-<<<<<<< Updated upstream
-<<<<<<< Updated upstream
-=======
-=======
->>>>>>> Stashed changes
 <?php
 require_once('dbClass.php');
 class users extends bdd
@@ -29,16 +24,21 @@ class users extends bdd
             $stmt = $con->prepare("SELECT email FROM utilisateurs WHERE email = '" . $email . "' ");
             $stmt->execute();
 
+            if(!is_numeric($tel) || strlen($tel) != 10 ){
+                echo '<br/> <b><p class="container center-align red-text">Veuillez rentrer un numéro valide.</p></b>';
+                return false;
+            }
+
             if ($stmt->fetch(PDO::FETCH_ASSOC) == true) {
                 // Si il existe déjà echo message d'erreur
-                echo '<br/> <b><p class="container red-text">Email déjà existant.</p></b>';
+                echo '<br/> <b><p class="container center-align red-text">Email déjà existant.</p></b>';
                 return false;
                 // Vérifier si les MDP sont les mêmes
             } elseif ($testpwd < 4) {
-                echo '<br />' . '<b><p class="container red-text">Rappel : Votre mot de passe doit contenir au minimum 7 caractères, incluant une majuscule, un chiffre et un caractère spécial.</p></b>';
+                echo '<br />' . '<b><p class="container center-align red-text"><b>Rappel : Votre mot de passe doit contenir au minimum 7 caractères, incluant une majuscule, un chiffre et un caractère spécial.</p></b></b>';
                 return false;
             } elseif ([$password] != [$confpassword]) {
-                echo '<br />' . '<b><p class="container red-text">Les mots de passe ne correspondent pas.</p></b>';
+                echo '<br />' . '<b><p class="container center-align red-text">Les mots de passe ne correspondent pas.</p></b>';
                 return false;
             } else { // Si oui on créer le compte en Db
 
@@ -66,21 +66,16 @@ class users extends bdd
             $req = $con->prepare("SELECT * FROM utilisateurs ");
             $req->execute();
             $result = $req->fetchAll();
-            
+
             for ($i = 0; isset($result[$i]); $i++) { // Boucle for pour parcourir le tableau
                 $logcheck = $result[$i]['email']; // On recupère le login dans le tableau parcouru
                 $passcheck = $result[$i]['password']; // Et ici le MDP 
-
-                if ($email == $logcheck and password_verify($password, $passcheck) == TRUE) { // Si Login et MDP == aux valeurs dans le tab alors co + Verify pass 
-                    
+                if ($email == $logcheck and password_verify($password, $passcheck) == TRUE) { // Si Login et MDP == aux valeurs dans le tab alors co + Verify pass                     
                     $_SESSION['user'] = $result[$i]; 
                     header('location:http://localhost:8888/projet_pro/users/profil.php');
-        
                 }
             }
-
                 if ($email == $logcheck and password_verify($password, $passcheck) == FALSE) { // Si Login et MDP == aux valeurs dans le tab alors co + Verify pass 
-
                     echo '<p class="container red-text"><b>Identifiant ou mot de passe incorrect.</b></p><br />';
                     return FALSE; 
                 }
@@ -134,9 +129,14 @@ class users extends bdd
 //Modifiation du n de Tel en Bdd           
 
             if (isset($tel) && !empty($tel)) {
-                $sql = $con->prepare("UPDATE utilisateurs SET tel = '" . $tel . "' WHERE id = '" . $id . "' ");
-                $sql->execute();
-                $_SESSION['tel'] = $tel;
+
+                if(is_numeric($tel) && strlen($tel) == 10){   
+                    $sql = $con->prepare("UPDATE utilisateurs SET tel = '" . $tel . "' WHERE id = '" . $id . "' ");
+                    $sql->execute();
+                    $_SESSION['tel'] = $tel;
+                }else{
+                    echo '<br />' . '<p class="erreur_inscription center-align red-text"><b>Rappel : Le numéro n\'est pas valide.</b></p>';
+                }
             }
 
 //Modification du Mot de passe en Bdd
@@ -145,7 +145,7 @@ class users extends bdd
 
                 if($testpwd < 4){
 
-                    echo '<br />' . '<p class="erreur_inscription">Rappel : Votre mot de passe doit contenir au minimum 7 caractères, incluant une Majuscule, un chifre et un caractère spécial.</p>';
+                    echo '<br />' . '<p class="erreur_inscription center-align red-text"><b>Rappel : Votre mot de passe doit contenir au minimum 7 caractères, incluant une Majuscule, un chifre et un caractère spécial.</b></p>';
                 }else { // Si oui on créer le compte en Db
 
                     if ($mdp != $conf) {
@@ -223,9 +223,4 @@ class users extends bdd
         echo $tel;
     }
 }
-<<<<<<< Updated upstream
 ?>
->>>>>>> Stashed changes
-=======
-?>
->>>>>>> Stashed changes
