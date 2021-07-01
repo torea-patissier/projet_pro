@@ -25,9 +25,19 @@ function modifyProductsHideForms() {
 }
 
 function hideToModify(){
+  let mainUsersHide = document.getElementById("mainUsers");
   let mainHide = document.getElementById("mainProduits"); //Je recupère l'id du main
   if (window.location.search.indexOf('show') > -1) { //Si l'index "show" est present dans l'url,
     mainHide.style.display = "none"; //on cache le main
+    mainUsersHide.style.display = "none";
   }
 }
 hideToModify(); //Execution de la function au dessus
+
+function hideToModifyUsers(){
+  let mainUsersHide = document.getElementById("hideUsers");
+  if (window.location.search.indexOf('show') > -1) { //Si l'index "show" est present dans l'url,
+    mainUsersHide.style.display = "none";
+  }
+}
+hideToModifyUsers();//Execution de la function au dessus

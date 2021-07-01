@@ -27,13 +27,13 @@ class backOffice extends bdd {
 
     public function ajoutProduitBdd()
     {
-        $nomProduit = htmlspecialchars($_POST['productName']);
-        $prixProduit = htmlspecialchars($_POST['productPrice']);
-        $descriptionProduit = htmlspecialchars($_POST['productDescription']);
-        $volumeProduit = htmlspecialchars($_POST['productVolume']);
-        $idCategorie = htmlspecialchars($_POST['productCategory']);
-        $idSCategorie = htmlspecialchars($_POST['productSCategory']);
-        $stockProduit = htmlspecialchars($_POST['productStock']);
+        $nomProduit = trim(htmlspecialchars($_POST['productName']));
+        $prixProduit = trim(htmlspecialchars($_POST['productPrice']));
+        $descriptionProduit = trim(htmlspecialchars($_POST['productDescription']));
+        $volumeProduit = trim(htmlspecialchars($_POST['productVolume']));
+        $idCategorie = trim(htmlspecialchars($_POST['productCategory']));
+        $idSCategorie = trim(htmlspecialchars($_POST['productSCategory']));
+        $stockProduit = trim(htmlspecialchars($_POST['productStock']));
         
         //Traitement de l'image
         
@@ -241,10 +241,10 @@ class backOffice extends bdd {
             if(isset($_POST['envoyer'])){
                 
 
-                $nom = htmlspecialchars(addslashes($_POST['nom']));
-                $description = htmlspecialchars(addslashes($_POST['description']));
-                $prix = htmlspecialchars($_POST['prix']);
-                $stock = htmlspecialchars($_POST['stock']);
+                $nom = trim(htmlspecialchars(addslashes($_POST['nom'])));
+                $description = trim(htmlspecialchars(addslashes($_POST['description'])));
+                $prix = trim(htmlspecialchars($_POST['prix']));
+                $stock = trim(htmlspecialchars($_POST['stock']));
 
                 // Requête de modification
                 //UPDATE produits SET nom = 'coco', prix = 10, description = 'Oui', id_categorie = 21, id_sous_categorie = 22, stock = 23, chemin_image = 0 WHERE id = 36
@@ -265,28 +265,6 @@ class backOffice extends bdd {
             }
     }
 
-    function tableauClients() {
-
-    $con = $this->connectDb();
-    $request = $con -> prepare("SELECT * FROM utilisateurs");
-    $request -> execute(); 
-        while($r = $request->fetch(PDO::FETCH_OBJ)){
-            
-            
-            echo "<tr id ='$r->id'>";
-            echo "<td data-target='nom'>" . $r->nom . "</td>";
-            echo "<td data-target='prenom'>" . $r->prenom . "</td>";
-            echo "<td data-target='email'>" . $r->email . "€</td>";
-            echo "<td data-target='tel'>" . $r->tel . "</td>";
-            // echo "<td><a id='modifyProduct' href='?show=" . $r->id . "' onclick='modifyProductsHideForms();'>Modifier</a><br/>";
-            // echo "<a href='?action=delete&amp;id=" . $r->id . "'>Supprimer</a></td>";
-            echo "<td><a href='#' data-role='update' data-id='$r->id'> Update </a></td>";
-            echo "<td></td>";
-
-            echo "</tr>";
-        }
-
-    }
 
     public function AfficherCategoriesBdd()
     {
@@ -303,7 +281,7 @@ class backOffice extends bdd {
 
         if (isset($_GET['id']) and !empty($_GET['id'])) {
 
-            $id = $_GET['id'];
+            $id = htmlspecialchars($_GET['id']);
             $supp = $con->prepare("DELETE FROM categories WHERE id = :id ");
             $supp->bindValue('id', $id, PDO::PARAM_INT);
             $supp->execute();
@@ -335,7 +313,7 @@ class backOffice extends bdd {
 
     public function AjouterCategorieBdd()
     {
-        $newCategorie = htmlspecialchars($_POST["newCategorie"]);
+        $newCategorie = trim(htmlspecialchars($_POST["newCategorie"]));
         $con = $this->connectDb();
         $req = $con->prepare("INSERT into categories (categorie) value (:newCategorie)");
         $req->bindValue("newCategorie", $newCategorie, PDO::PARAM_STR);
@@ -348,7 +326,7 @@ class backOffice extends bdd {
         $stmt = $con->prepare("SELECT * FROM sous_categories"); // Requete
         $stmt->execute(); //J'éxécute la requete
         $result = $stmt->fetchAll(); //Result devient un tableau des valeurs obtenues
-        $newSCategorie = htmlspecialchars($_POST["newSCategorie"]); //
+        $newSCategorie = trim(htmlspecialchars($_POST["newSCategorie"])); //
         foreach ($result as $resultat) {
             if ($newSCategorie == $resultat['sous_categorie']) {
                 echo "La sous catégorie existe dejà en base de données";
@@ -361,7 +339,7 @@ class backOffice extends bdd {
                                     //!!!!!!!! DEBUT CLASSES GALERIE !!!!!!!//
     public function addNewGaleryCategory(){
 
-        $newCategory = $_POST["newGaleryCategory"];
+        $newCategory = trim(htmlspecialchars($_POST["newGaleryCategory"]));
 
         $con = $this->connectDb();
         $request = $con->prepare("SELECT * FROM categories_galerie");
@@ -410,7 +388,7 @@ class backOffice extends bdd {
 
         if (isset($_GET['id']) and !empty($_GET['id'])) {
 
-            $id = $_GET['id'];
+            $id = htmlspecialchars($_GET['id']);
             $supp = $con->prepare("DELETE FROM categories_galerie WHERE id = :id ");
             $supp->bindValue('id', $id, PDO::PARAM_INT);
             $supp->execute();
@@ -420,8 +398,8 @@ class backOffice extends bdd {
 
     public function newPhoto(){
 
-        $nomProduit = htmlspecialchars($_POST["nameNewPhoto"]); //On récupère le nom de la photo
-        $photoCategory = htmlspecialchars($_POST["categoriePhoto"]); //On récupère l'id de la catégorie de la photo
+        $nomProduit = trim(htmlspecialchars($_POST["nameNewPhoto"])); //On récupère le nom de la photo
+        $photoCategory = trim(htmlspecialchars($_POST["categoriePhoto"])); //On récupère l'id de la catégorie de la photo
 
         //Traitement de l'image
 
@@ -484,77 +462,6 @@ class backOffice extends bdd {
             $request->execute();
     }
 
-    public function carouselPhotosEnfant(){
-
-        $con = $this->connectDb();
-        $request = $con->prepare("SELECT * FROM images_galerie");
-        $request->execute();
-        $resultat = $request->fetchAll();
-
-        foreach($resultat as $result){
-            ?>
-            <img class="carousel-item" src="../Images_Galerie/<?php echo $result['nom_image'] ?>.jpg" alt="image coupe"><a href="gestion_galerie.php?id=<?php echo $result['id'] ?>">X</a>
-            <?php
-        }
-
-        if (isset($_GET['id']) and !empty($_GET['id'])) {
-
-            $id = $_GET['id'];
-            $supp = $con->prepare("DELETE FROM images_galerie WHERE id = :id ");
-            $supp->bindValue('id', $id, PDO::PARAM_INT);
-            $supp->execute();
-            header('location:http://localhost/projet_pro/backoffice/gestion_galerie?page=1.php');
-        }
-    }
-
-    public function carouselPhotosExtensions(){
-
-        $con = $this->connectDb();
-        $request = $con->prepare("SELECT * FROM categories_galerie WHERE categorie = 'Extensions'");
-        $request->execute();
-        $resultat = $request->fetchAll();
-
-        foreach($resultat as $result){
-            $idCategorie = $result['id'];
-        }
-       // var_dump($idCategorie);
-
-        $requestPhotos = $con->prepare("SELECT * FROM images_galerie WHERE id_categorie = '$idCategorie'");
-        $requestPhotos->execute();
-        $resultatPhotos = $requestPhotos->fetchAll();
-
-       // var_dump($resultatPhotos);
-
-        foreach($resultatPhotos as $resultFetch){
-            ?>
-            <a class="carousel-item" href="gestion_galerie.php?id=<?php echo $resultFetch['id'] ?>">X <img src="../Images_Galerie/<?php echo $resultFetch['nom_image'] ?>.jpg" alt="image coupe"></a>
-            <?php
-        }
-    }
-
-    public function viewAllPhotos()
-    {
-        $con = $this->connectDb();
-        $request = $con->prepare("SELECT * FROM `images_galerie` INNER JOIN categories_galerie ON images_galerie.id_categorie = categories_galerie.id LIMIT 0,5");
-        $request->execute();
-
-        echo "<br /><br /><br />";
-        echo "<div class='row'>";
-        echo "<table id='tableProducts' class='responsive-table' ><thead>";
-        echo "<th>Image</th>";
-        echo "<th>Catégorie de l'image</th>";
-        echo "</thead><tbody>";
-
-        while($r = $request->fetch(PDO::FETCH_OBJ)){
-
-            echo "<tr>";
-            echo "<td><img src='../Images_Galerie/" . addslashes($r->nom_image) .".jpg' width='100px' height='100px'/></td>";
-            echo "<td>" . $r->categorie. "</td>";
-            echo "<td><a href='?action=delete&amp;id=" . $r->id . "'>Supprimer</a></td>";
-            echo "</tr>";
-        }
-        echo "</tbody></table></div>";
-    }
 
     function deletePhoto(){
         $con = $this->connectDb();
@@ -715,4 +622,130 @@ class backOffice extends bdd {
             ?><button class="btn black s"><a href="?page=<?php echo $page + 1; ?>">Page suivante</a></button>
         <?php endif; ?><?php
     }
+
+    public function showTableUsers(){
+
+        $con = $this->connectDb();
+        $query = $con->prepare("SELECT * FROM utilisateurs");
+        $query->execute();
+        $resultats = $query->fetchAll();
+
+            foreach($resultats as $result){
+                ?>
+                <tr>
+                <td><?php echo $result["prenom"] ?></td>
+                <td><?php echo $result["nom"] ?></td>
+                <td><?php echo $result["email"] ?></td>
+                <td><?php echo $result["tel"] ?></td>
+                <td><?php echo $result["id_droits"] ?></td>
+                <td>
+                    <a href='?show=<?php echo $result["id"] ?>'>Modifier</a><br />
+                    <a href='?action=delete&amp;id=<?php echo $result["id"] ?>'>Supprimer</a>
+                </td>
+                </tr>
+            <?php
+    }
+
+
+    }
+
+    function modifierUser(){
+
+        $id = $_GET["show"];
+        $con = $this->connectDb();
+        $query = $con->prepare("SELECT * FROM utilisateurs WHERE id = :id");
+        $query->bindValue("id", $id, PDO::PARAM_INT);
+        $query->execute();
+        $resultats = $query->fetchAll();
+
+        foreach($resultats as $result){
+            $nom = $result["nom"];
+            $prenom = $result["prenom"];
+            $email = $result["email"];
+            $tel = $result["tel"];
+            $id_droits = $result["id_droits"];
+        }
+//        var_dump($resultats);
+        ?>
+        <div class="container">
+            <div class="row">
+                <form id='modifierArticle' class="col s12" action="" method="post">
+
+                    <div class="input-field col s12 m4 l4">
+                        <label>Nom :</label><br/><br />
+                        <input type="text" name="nom" value="<?php echo $nom;?>" required><br/><br />
+                    </div>
+
+                    <div class="input-field col s12 m4 l4">
+                        <label>Prénom :</label><br/><br />
+                        <input type="text" name="prenom" value="<?php echo $prenom;?>" required><br/><br />
+                    </div>
+
+                    <div class="input-field col s12 m4 l4">
+                        <label>Email :</label><br/><br />
+                        <input type="text" name="email" value="<?php echo $email;?>" required><br/><br />
+                    </div>
+
+                    <div class="input-field col s12 m4 l4">
+                        <label>Téléphone :</label><br/><br />
+                        <input type="text" name="tel" value="<?php echo $tel;?>" required><br/><br />
+                    </div><br/>
+
+                    <div class="input-field col s12 m4 l4">
+                        <label>Id_Droits :</label><br/><br />
+                        <input type="text" name="id_droits" value="<?php echo $id_droits;?>" required><br/><br />
+                    </div><br/>
+
+                    <input class="btn black center-align" type="submit" name="modifier" value="Modifier"><br/><br />
+                </form>
+            </div>
+        </div>
+
+        <?php
+
+        if (isset($_POST['modifier'])) {
+            $newPrenom = trim(htmlspecialchars($_POST['prenom']));
+            $newNom = trim(htmlspecialchars($_POST['nom']));
+            $newEmail = trim(htmlspecialchars($_POST['email']));
+            $newTel = trim(htmlspecialchars($_POST['tel']));
+            $newId_droits = trim(htmlspecialchars($_POST['id_droits']));
+
+            if (!empty($_POST['prenom'])) {
+                $reqID = $con->prepare("UPDATE utilsateurs SET  prenom = :newPrenom WHERE id = :id ");
+                $reqID->bindValue('newPrenom', $newPrenom, PDO::PARAM_STR);
+                $reqID->bindValue('id', $id, PDO::PARAM_INT);
+                $reqID->execute();
+            }
+            if (!empty($_POST['nom'])) {
+                $reqEmail = $con->prepare("UPDATE utilisateurs SET  nom = :newNom WHERE id = :id ");
+                $reqEmail->bindValue('newNom', $newNom, PDO::PARAM_STR);
+                $reqEmail->bindValue('id', $id, PDO::PARAM_INT);
+                $reqEmail->execute();
+
+            }
+            if (!empty($_POST['email'])) {
+                $reqEmail = $con->prepare("UPDATE utilisateurs SET  email = :newEmail WHERE id = :id ");
+                $reqEmail->bindValue('newEmail', $newEmail, PDO::PARAM_STR);
+                $reqEmail->bindValue('id', $id, PDO::PARAM_INT);
+                $reqEmail->execute();
+
+            }
+            if (!empty($_POST['tel'])) {
+                $reqEmail = $con->prepare("UPDATE utilisateurs SET  tel = :newTel WHERE id = :id ");
+                $reqEmail->bindValue('newTel', $newTel, PDO::PARAM_STR);
+                $reqEmail->bindValue('id', $id, PDO::PARAM_INT);
+                $reqEmail->execute();
+
+            }
+            if (!empty($_POST['id_droits'])) {
+                $reqIdDroits = $con->prepare("UPDATE utilisateurs SET  id_droits = :newIdDroits WHERE id = :id ");
+                $reqIdDroits->bindValue('newIdDroits', $newId_droits, PDO::PARAM_INT);
+                $reqIdDroits->bindValue('id', $id, PDO::PARAM_INT);
+                $reqIdDroits->execute();
+            }
+            header("Refresh: 0;url=http://localhost/projet_pro/backoffice/clients.php");
+
+        }
+    }
+
 }

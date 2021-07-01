@@ -1,0 +1,42 @@
+if (isset($_POST['modifier'])) {
+                $newPrenom = htmlspecialchars($_POST['prenom']);
+                $newNom = htmlspecialchars($_POST['nom']);
+                $newEmail = htmlspecialchars($_POST['email']);
+                $newTel = htmlspecialchars($_POST['tel']);
+                $newId_droits = htmlspecialchars($_POST['id_droits']);
+
+                if (!empty($_POST['prenom'])) {
+                    $reqID = $con->prepare("UPDATE utilsateurs SET  prenom = :newPrenom WHERE id = :id ");
+                    $reqID->bindValue('newPrenom', $newPrenom, PDO::PARAM_STR);
+                    $reqID->bindValue('id', $id, PDO::PARAM_INT);
+                    $reqID->execute();
+                }
+                if (!empty($_POST['nom'])) {
+                    $reqEmail = $con->prepare("UPDATE utilisateurs SET  nom = :newNom WHERE id = :id ");
+                    $reqEmail->bindValue('newNom', $newNom, PDO::PARAM_STR);
+                    $reqEmail->bindValue('id', $id, PDO::PARAM_INT);
+                    $reqEmail->execute();
+
+                }
+                if (!empty($_POST['email'])) {
+                    $reqEmail = $con->prepare("UPDATE utilisateurs SET  email = :newEmail WHERE id = :id ");
+                    $reqEmail->bindValue('newEmail', $newEmail, PDO::PARAM_STR);
+                    $reqEmail->bindValue('id', $id, PDO::PARAM_INT);
+                    $reqEmail->execute();
+
+                }
+                if (!empty($_POST['tel'])) {
+                    $reqEmail = $con->prepare("UPDATE utilisateurs SET  tel = :newTel WHERE id = :id ");
+                    $reqEmail->bindValue('newTel', $newTel, PDO::PARAM_INT);
+                    $reqEmail->bindValue('id', $id, PDO::PARAM_INT);
+                    $reqEmail->execute();
+
+                }
+                if (!empty($_POST['id_droits'])) {
+                    $reqIdDroits = $con->prepare("UPDATE utilisateurs SET  id_droits = :newIdDroits WHERE id = :id ");
+                    $reqIdDroits->bindValue('newIdDroits', $newId_droits, PDO::PARAM_INT);
+                    $reqIdDroits->bindValue('id', $id, PDO::PARAM_INT);
+                    $reqIdDroits->execute();
+                }
+                header("Refresh: 0;url=http://localhost/projet_pro/backoffice/clients.php");
+            }
