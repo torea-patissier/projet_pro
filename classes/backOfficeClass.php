@@ -652,7 +652,7 @@ class backOffice extends bdd {
                 <td><?php echo $result["tel"] ?></td>
                 <td><?php echo $result["id_droits"] ?></td>
                 <td>
-                    <a href='?show=<?php echo $result["id"] ?>'>Modifier</a><br />
+                    <a href='?userModif=<?php echo $result["id"] ?>'>Modifier</a><br />
                     <a href='?action=delete&amp;id=<?php echo $result["id"] ?>'>Supprimer</a>
                 </td>
                 </tr>
@@ -664,7 +664,7 @@ class backOffice extends bdd {
 
     function modifierUser(){
 
-        $id = $_GET["show"];
+        $id = $_GET["userModif"];
         $con = $this->connectDb();
         $query = $con->prepare("SELECT * FROM utilisateurs WHERE id = :id");
         $query->bindValue("id", $id, PDO::PARAM_INT);
@@ -680,18 +680,21 @@ class backOffice extends bdd {
         }
 //        var_dump($resultats);
         ?>
+
+
         <div class="container">
             <div class="row">
+                <h1>Modifier <?php echo $prenom ?></h1>
                 <form id='modifierArticle' class="col s12" action="" method="post">
+
+                    <div class="input-field col s12 m4 l4">
+                        <label>Prénom :</label><br/><br />
+                        <input type="text" name="pre" value="<?php echo $prenom;?>" required><br/><br />
+                    </div>
 
                     <div class="input-field col s12 m4 l4">
                         <label>Nom :</label><br/><br />
                         <input type="text" name="nom" value="<?php echo $nom;?>" required><br/><br />
-                    </div>
-
-                    <div class="input-field col s12 m4 l4">
-                        <label>Prénom :</label><br/><br />
-                        <input type="text" name="prenom" value="<?php echo $prenom;?>" required><br/><br />
                     </div>
 
                     <div class="input-field col s12 m4 l4">
@@ -708,8 +711,10 @@ class backOffice extends bdd {
                         <label>Id_Droits :</label><br/><br />
                         <input type="text" name="id_droits" value="<?php echo $id_droits;?>" required><br/><br />
                     </div><br/>
-
-                    <input class="btn black center-align" type="submit" name="modifier" value="Modifier"><br/><br />
+                    <div class="input-field col s12 m12 l12">
+                    <input class="btn black right-align" type="submit" name="modifier" value="Modifier"><br/><br />
+                        <button class="btn black right-align"><a class="aFooter" href="http://localhost/projet_pro/backoffice/clients.php">Retour</a></button><br/><br />
+                    </div>
                 </form>
             </div>
         </div>
@@ -717,37 +722,37 @@ class backOffice extends bdd {
         <?php
 
         if (isset($_POST['modifier'])) {
-            $newPrenom = trim(htmlspecialchars($_POST['prenom']));
+            $newPre = trim(htmlspecialchars($_POST['pre']));
             $newNom = trim(htmlspecialchars($_POST['nom']));
             $newEmail = trim(htmlspecialchars($_POST['email']));
             $newTel = trim(htmlspecialchars($_POST['tel']));
             $newId_droits = trim(htmlspecialchars($_POST['id_droits']));
 
-            if (!empty($_POST['prenom'])) {
-                $reqID = $con->prepare("UPDATE utilsateurs SET  prenom = :newPrenom WHERE id = :id ");
-                $reqID->bindValue('newPrenom', $newPrenom, PDO::PARAM_STR);
-                $reqID->bindValue('id', $id, PDO::PARAM_INT);
-                $reqID->execute();
+            if (!empty($_POST['pre'])) {
+                $reqPrenom = $con->prepare("UPDATE utilisateurs SET prenom = :newPrenom WHERE id = :id ");
+                $reqPrenom->bindValue('newPrenom', $newPre, PDO::PARAM_STR);
+                $reqPrenom->bindValue('id', $id, PDO::PARAM_INT);
+                $reqPrenom->execute();
             }
             if (!empty($_POST['nom'])) {
-                $reqEmail = $con->prepare("UPDATE utilisateurs SET  nom = :newNom WHERE id = :id ");
-                $reqEmail->bindValue('newNom', $newNom, PDO::PARAM_STR);
-                $reqEmail->bindValue('id', $id, PDO::PARAM_INT);
-                $reqEmail->execute();
+                $reqNom = $con->prepare("UPDATE utilisateurs SET nom = :newNom WHERE id = :id ");
+                $reqNom->bindValue('newNom', $newNom, PDO::PARAM_STR);
+                $reqNom->bindValue('id', $id, PDO::PARAM_INT);
+                $reqNom->execute();
 
             }
             if (!empty($_POST['email'])) {
-                $reqEmail = $con->prepare("UPDATE utilisateurs SET  email = :newEmail WHERE id = :id ");
+                $reqEmail = $con->prepare("UPDATE utilisateurs SET email = :newEmail WHERE id = :id ");
                 $reqEmail->bindValue('newEmail', $newEmail, PDO::PARAM_STR);
                 $reqEmail->bindValue('id', $id, PDO::PARAM_INT);
                 $reqEmail->execute();
 
             }
             if (!empty($_POST['tel'])) {
-                $reqEmail = $con->prepare("UPDATE utilisateurs SET  tel = :newTel WHERE id = :id ");
-                $reqEmail->bindValue('newTel', $newTel, PDO::PARAM_STR);
-                $reqEmail->bindValue('id', $id, PDO::PARAM_INT);
-                $reqEmail->execute();
+                $reqTel = $con->prepare("UPDATE utilisateurs SET tel = :newTel WHERE id = :id ");
+                $reqTel->bindValue('newTel', $newTel, PDO::PARAM_STR);
+                $reqTel->bindValue('id', $id, PDO::PARAM_INT);
+                $reqTel->execute();
 
             }
             if (!empty($_POST['id_droits'])) {

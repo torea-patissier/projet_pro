@@ -11,41 +11,44 @@ if ($id_droits != 20260) {
 }
 
 
+if (isset($_GET['userModif'])) {
+    $gestionUtilisateurs->modifierUser();
+}
+
+
 ?>
 
-<main id="hideUsers">
-    <div class="center-align">
-        <h1>Gestion des utilisateurs</h1>
-        <p>Le tableau des utilisateurs ci-dessous vous permet de modifier les informations les concernant ou encore les supprimer.</p>
-        <button class="btn black"> <a class="aFooter" href="http://localhost/projet_pro/backoffice/backoffice.php">Retour</a></button>
-    </div>
-    <br/><br/><br/>
-    <?php
-        if (isset($_GET['show'])) {
-            $gestionUtilisateurs->modifierUser();
-        }
-    ?>
+<main>
+    <div id="mainUsers">
+        <div class="center-align">
+            <h1>Gestion des utilisateurs</h1>
+            <p>Le tableau des utilisateurs ci-dessous vous permet de modifier les informations les concernant ou encore les supprimer.</p>
+            <button class="btn black"> <a class="aFooter" href="http://localhost/projet_pro/backoffice/backoffice.php">Retour</a></button>
+        </div>
+        <br/><br/><br/>
 
-    <div class="container">
-            <table class="responsive-table">
-                <thead>
-                    <tr>
-                        <th>Prénom</th>
-                        <th>Nom</th>
-                        <th>E-Mail</th>
-                        <th>Téléphone</th>
-                        <th>Droits</th>
-                    </tr>
-                </thead>
-                <tbody>
-                    <?php $gestionUtilisateurs->showTableUsers(); ?>
-                </tbody>
-            </table>
-            <div class="left-align">
-                <p>Droits : <br />
-                1 = Utilisateur<br />
-                2 = Administrateur</p>
-            </div>
+
+        <div class="container">
+                <table class="responsive-table">
+                    <thead>
+                        <tr>
+                            <th>Prénom</th>
+                            <th>Nom</th>
+                            <th>E-Mail</th>
+                            <th>Téléphone</th>
+                            <th>Droits</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <?php $gestionUtilisateurs->showTableUsers(); ?>
+                    </tbody>
+                </table>
+                <div class="left-align">
+                    <p>Droits : <br />
+                    1 = Utilisateur<br />
+                    2 = Administrateur</p>
+                </div>
+        </div>
     </div>
 </main>
 

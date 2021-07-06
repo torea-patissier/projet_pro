@@ -33,8 +33,8 @@ function hideToModify(){
 hideToModify(); //Execution de la function au dessus
 
 function hideToModifyUsers(){
-  let mainUsersHide = document.getElementById("hideUsers");
-  if (window.location.search.indexOf('show') > -1) { //Si l'index "show" est present dans l'url,
+  let mainUsersHide = document.getElementById("mainUsers");
+  if (window.location.search.indexOf('userModif') > -1) { //Si l'index "show" est present dans l'url,
     mainUsersHide.style.display = "none";
   }
 }
