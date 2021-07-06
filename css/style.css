@@ -1,4 +1,5 @@
 @import url("https://fonts.googleapis.com/css2?family=Montserrat&display=swap");
+@import url('https://fonts.googleapis.com/css2?family=Dancing+Script:wght@700&display=swap');
 
 * {
   font-family: "Montserrat", sans-serif;
@@ -15,6 +16,76 @@ body {
 
 .btnProduits {
   margin-top: 3em !important;
+}
+
+
+
+/* Pour garder un footer en bas de page */
+body {
+  display: flex;
+  min-height: 100vh;
+  flex-direction: column;
+}
+
+main {
+  flex: 1 0 auto;
+}
+/* Pour garder un footer en bas de page */
+
+/* Liens Footer */
+.aFooter{
+  color: white;
+}
+
+aRed{
+  color: Red;
+}
+
+/* Navbar & Footer */
+nav, .page-footer{
+  background-color: #88A97A;
+}
+
+a{
+  color: black;
+}
+
+/* 404 */
+.main404{
+  background-image: url(../images/image404.jpg);
+  color: #ffff;
+}
+
+/* I.N.D.E.X */
+/* H2 index */
+.h2Index{
+  display: flex;
+  justify-content: space-between;
+}
+/* Police Index */
+.txtIndex{
+  font-family: 'Dancing Script', cursive;
+}
+/* Couleur de la div0 */
+.divIndex0{
+  background-color: #88A97A;
+}
+/* Couleur de la div1 */
+.divIndex1{
+  background-color: #A0AF81;
+}
+/* Parallax Index */
+.parallax{
+  transform: translateY(250px);
+}
+
+.coco{
+  display: flex;
+  justify-content:row;
+}
+
+.resteEnBas{
+  height: 80vh;
 }
 
 

@@ -42,8 +42,8 @@ class backOffice extends bdd {
 
         if(!empty($img_Tmp)){ //Si nom temporaire n'esst pas vide
 
-            $img_Name = explode(".", $Img); //On enleve le point du nom
-            $img_Ext = end($img_Name); //On attribue a img_Ext la valeur du dernier element du tableau
+            $img_Name = explode(".", $Img); //On sépare la chaine de caractères en deux parties, avant et apres le point
+            $img_Ext = end($img_Name); //On attribue a img_Ext la valeur du dernier element du tableau, l'extesion du fichier
 
             if(in_array(strtolower($img_Ext),array("png", "jpg", "jpeg")) === false){ //si le dernier element du tableau ne correspond pas a un de ces types de fichier
 
@@ -322,16 +322,8 @@ class backOffice extends bdd {
 
     public function AjouterSCategorieBdd()
     {
-        $con = $this->connectDb(); // Connexion Db 
-        $stmt = $con->prepare("SELECT * FROM sous_categories"); // Requete
-        $stmt->execute(); //J'éxécute la requete
-        $result = $stmt->fetchAll(); //Result devient un tableau des valeurs obtenues
         $newSCategorie = trim(htmlspecialchars($_POST["newSCategorie"])); //
-        foreach ($result as $resultat) {
-            if ($newSCategorie == $resultat['sous_categorie']) {
-                echo "La sous catégorie existe dejà en base de données";
-            }
-        }
+        $con = $this->connectDb(); // Connexion Db
         $stmt = $con->prepare("INSERT INTO sous_categories (sous_categorie) values (:nom)");
         $stmt->bindValue('nom', $newSCategorie, PDO::PARAM_STR);
         $stmt->execute();
@@ -600,7 +592,7 @@ class backOffice extends bdd {
             echo "<a href='?action=delete&amp;id=" . $r->id . "'>Supprimer</a></td>";
             echo "</tr>";
         }
-        echo "</tbody></table></div>";
+        echo "</tbody></table></div><br /><br/>";
 
         //On calcule le nombre de pages
         $nombreDePages = ceil($nombreElementsTotal / $limite);
@@ -610,25 +602,42 @@ class backOffice extends bdd {
         /* page que la première*/
 
         if ($page > 1) :
-            ?><button class="btn black"><a href="?page=<?php echo $page - 1; ?>">Page précédente</a></button>
+            ?><button class="btn black"><a class="aFooter" href="?page=<?php echo $page - 1; ?>">←</a></button>
         <?php endif;
-
+        echo "    ";
         for ($i = 1; $i <= $nombreDePages; $i++) :
             ?><u><a href="?page=<?php echo $i; ?>"><?php echo $i; ?></a></u>
         <?php endfor;
-
+        echo "    ";
         //Avec le nombre total de pages, on peut aussi masquer le lien vers la page sivante quand on est sur la derniere//
         if ($page < $nombreDePages) :
-            ?><button class="btn black s"><a href="?page=<?php echo $page + 1; ?>">Page suivante</a></button>
+            ?><button class="btn black s"><a class="aFooter" href="?page=<?php echo $page + 1; ?>">→</a></button>
         <?php endif; ?><?php
     }
 
     public function showTableUsers(){
 
         $con = $this->connectDb();
+
+        if (isset($_GET['id']) and !empty($_GET['id'])) {
+
+            if ($_SESSION['user']['id'] == $_GET['id']) {
+
+                echo '<div class="container">Impossible de supprimer un compte qui est connecté'.'</div>';
+            } else {
+
+                $id = $_GET['id'];
+                $supp = $con->prepare("DELETE FROM utilisateurs WHERE id = :id ");
+                $supp->bindValue('id', $id, PDO::PARAM_INT);
+                $supp->execute();
+                header('Refresh 0;');
+            }
+        }
+
         $query = $con->prepare("SELECT * FROM utilisateurs");
         $query->execute();
         $resultats = $query->fetchAll();
+
 
             foreach($resultats as $result){
                 ?>

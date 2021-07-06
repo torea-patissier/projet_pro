@@ -3,10 +3,12 @@ session_start();
 require_once('../html_partials/header.php');
 include '../autoloader.php';
 $gestionProduits = new backOffice;
-// if ($id_droits != 2) {
-//     header('location:http://localhost/boutique/Error/404.php');
-//     exit();
-// }
+
+$id_droits = $_SESSION['user']['id_droits'];
+if ($id_droits != 20260) {
+    header('location:http://localhost/projet_pro/404.php');
+    exit();
+}
 
 if(isset($_POST["addProduct"])){
     $gestionProduits -> ajoutProduitBdd();
@@ -26,7 +28,7 @@ $gestionProduits->DeleteProduit();
         <div id="divAjouterProduit">
             <p>Sur cet interfance vous pourrez ajouter, modifier ou encore surprimmer les articles disponibles sur votre espace Boutique </p>
             <div class="btnProduits">
-                <button class="btn black"> <a class="btnHref" href="http://localhost/projet_pro/backoffice/backoffice.php">Retour</a></button>
+                <button class="btn black"> <a class="aFooter" href="http://localhost/projet_pro/backoffice/backoffice.php">Retour</a></button>
                 <button id="toggleAddProduct" class="btn black" onclick="showHideAddProduct();">Ajouter un produit</button>
             </div>
         </div>
@@ -83,7 +85,7 @@ $gestionProduits->DeleteProduit();
                 <div id="tableProduct">
                    <?php $gestionProduits -> paginationProduits(); ?>
                 </div>
-        
+                <br /><br /><br />
     </div>
 </main>
 <?php require_once('../html_partials/footer.php'); ?>

@@ -25,11 +25,9 @@ function modifyProductsHideForms() {
 }
 
 function hideToModify(){
-  let mainUsersHide = document.getElementById("mainUsers");
   let mainHide = document.getElementById("mainProduits"); //Je recupère l'id du main
   if (window.location.search.indexOf('show') > -1) { //Si l'index "show" est present dans l'url,
     mainHide.style.display = "none"; //on cache le main
-    mainUsersHide.style.display = "none";
   }
 }
 hideToModify(); //Execution de la function au dessus
@@ -41,3 +39,25 @@ function hideToModifyUsers(){
   }
 }
 hideToModifyUsers();//Execution de la function au dessus
+
+$(document).ready(function () {
+  function showdata() {//  Fonction pour afficher les commentaires sur INDEX.HTML de façon Asynchrone
+
+    $.ajax({
+      url: "action.php", // Récupère les résultats de echo $pageAction->voirAvisClients();
+      success : function (result) { // result == résultat PHP
+        data = JSON.parse(result); // data == result sous format JSON
+        //console.log(data); // On peut console result pour voir le format de result dans la console
+        //console.log(result); // On peut console data pour voir le format de data dans la console
+
+        data.forEach((result) => {
+          // Boucle for each en Jquery
+          $("#afficherCommentaire").append(
+              `<p>${result.avis} <br/> ${result.prenom} ${result.nom}</p>`
+          );
+        });
+      },
+    });
+  }
+  showdata();
+});

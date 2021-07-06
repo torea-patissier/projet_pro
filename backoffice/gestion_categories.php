@@ -3,10 +3,12 @@ session_start();
 require_once('../html_partials/header.php');
 include '../autoloader.php';
 $gestionCategories = new backOffice;
-// if ($id_droits != 2) {
-//     header('location:http://localhost/boutique/Error/404.php');
-//     exit();
-// }
+
+$id_droits = $_SESSION['user']['id_droits'];
+if ($id_droits != 20260) {
+    header('location:http://localhost/projet_pro/404.php');
+    exit();
+ }
 
 if (isset($_POST["valider"])) {
     if (!empty($_POST["newCategorie"])) {
