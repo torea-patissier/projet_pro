@@ -22,6 +22,16 @@ if (isset($_POST["valider"])) {
     }
 }
 
+if (isset($_GET['deletesc']) and !empty($_GET['deletesc'])) {
+
+    $gestionCategories->deleteSCategoryBdd();
+}
+
+if (isset($_GET['deletec']) and !empty($_GET['deletec'])) {
+
+    $gestionCategories->deleteCategoryBdd();
+}
+
 ?>
 
 <main>

@@ -276,17 +276,18 @@ class backOffice extends bdd {
         echo "<h2> Catégories : </h2>";
         foreach ($result as $resultat) {
 
-            echo $resultat["categorie"] . ' ' . ' <a class="href_admin" href="gestion_categories.php?id=' . $resultat['id'] . '">' . ' <b>Supprimer</b>' . '</a>' . "<br />";
+            echo $resultat["categorie"] . ' ' . ' <a class="href_admin" href="gestion_categories.php?deletec=' . $resultat['id'] . '">' . ' <b>Supprimer</b>' . '</a>' . "<br />";
         }
+    }
 
-        if (isset($_GET['id']) and !empty($_GET['id'])) {
+    public function deleteCategoryBdd(){
 
-            $id = htmlspecialchars($_GET['id']);
+            $id = htmlspecialchars($_GET['deletec']);
+            $con = $this->connectDb();
             $supp = $con->prepare("DELETE FROM categories WHERE id = :id ");
             $supp->bindValue('id', $id, PDO::PARAM_INT);
             $supp->execute();
             header('location:http://localhost/projet_pro/backoffice/gestion_categories.php');
-        }
     }
 
     public function AfficherSCategoriesBdd()
@@ -298,17 +299,18 @@ class backOffice extends bdd {
 
         echo "<h2> Sous Catégories : </h2>";
         foreach ($result as $resultat) {
-            echo $resultat["sous_categorie"] . ' ' . ' <a class="href_admin" href="gestion_categories.php?id=' . $resultat['id'] . '">' . ' <b>Supprimer</b>' . '</a>' . "<br />";
+            echo $resultat["sous_categorie"] . ' ' . ' <a class="href_admin" href="gestion_categories.php?deletesc=' . $resultat['id'] . '">' . ' <b>Supprimer</b>' . '</a>' . "<br />";
         }
+    }
 
-        if (isset($_GET['id']) and !empty($_GET['id'])) {
+    public function deleteSCategoryBdd(){
 
-            $id = $_GET['id'];
+            $id = $_GET['deletesc'];
+            $con = $this->connectDb();
             $supp = $con->prepare("DELETE FROM sous_categories WHERE id = :id ");
             $supp->bindValue('id', $id, PDO::PARAM_INT);
             $supp->execute();
             header('location:http://localhost/projet_pro/backoffice/gestion_categories.php');
-        }
     }
 
     public function AjouterCategorieBdd()
@@ -375,17 +377,19 @@ class backOffice extends bdd {
 
         echo "<p> Categories galerie existantes : </p>";
         foreach ($resultat as $result) {
-            echo $result["categorie"] . ' ' . ' <a class="href_admin" href="gestion_galerie.php?id=' . $result['id'] . '">' . ' <b>Supprimer</b>' . '</a>' . "<br />";
+            echo $result["categorie"] . ' ' . ' <a class="href_admin" href="gestion_galerie.php?deleteGCategory=' . $result['id'] . '">' . ' <b>Supprimer</b>' . '</a>' . "<br />";
         }
+    }
 
-        if (isset($_GET['id']) and !empty($_GET['id'])) {
+    public function deleteGCategory(){
 
-            $id = htmlspecialchars($_GET['id']);
+            $con = $this->connectDb();
+            $id = htmlspecialchars($_GET['deleteGCategory']);
             $supp = $con->prepare("DELETE FROM categories_galerie WHERE id = :id ");
             $supp->bindValue('id', $id, PDO::PARAM_INT);
             $supp->execute();
             header('location:http://localhost/projet_pro/backoffice/gestion_galerie?page=1.php');
-        }
+
     }
 
     public function newPhoto(){
@@ -519,7 +523,7 @@ class backOffice extends bdd {
         /* page que la première*/
 
         if ($page > 1) :
-            ?><button class="btn black"><a href="?page=<?php echo $page - 1; ?>">Page précédente</a></button>
+            ?><button class="btn black"><a class=" aFooter" href="?page=<?php echo $page - 1; ?>">Page précédente</a></button>
         <?php endif;
 
         for ($i = 1; $i <= $nombreDePages; $i++) :
@@ -528,7 +532,7 @@ class backOffice extends bdd {
 
         //Avec le nombre total de pages, on peut aussi masquer le lien vers la page sivante quand on est sur la derniere//
         if ($page < $nombreDePages) :
-            ?><button class="btn black s"><a href="?page=<?php echo $page + 1; ?>">Page suivante</a></button>
+            ?><button class="btn black s"><a class="aFooter" href="?page=<?php echo $page + 1; ?>">Page suivante</a></button>
         <?php endif; ?><?php
     }
 

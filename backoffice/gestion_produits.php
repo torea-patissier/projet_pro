@@ -33,7 +33,7 @@ $gestionProduits->DeleteProduit();
             </div>
         </div>
                 <div id="formAddProduct" style="display: none;">
-                    <button class="btn black"><a class="btnHref" href="http://localhost/projet_pro/backoffice/gestion_produits?page=1.php">Retour</a></button>
+                    <button class="btn black"><a class="aFooter" href="http://localhost/projet_pro/backoffice/gestion_produits?page=1.php">Retour</a></button>
                     <p>Avec ce formulaire vous pouvez ajouter un produit à votre page Boutique.<br />
                     En cas d'erreur il est possible de le supprimer dans l'onglet "Liste des produits"</p>
                     <form action="" method="POST" enctype="multipart/form-data">

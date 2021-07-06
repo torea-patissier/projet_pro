@@ -22,19 +22,25 @@ if ($id_droits != 20260) {
 
     $gestionGalerie->deletePhoto();
 
+    if (isset($_GET['deleteGCategory']) and !empty($_GET['deleteGCategory'])) {
+        $gestionGalerie->deleteGCategory();
+    }
 
 ?>
 <main>
     <div class="container fluid center-align">
-        <h1>Gestion galerie photos</h1>
+        <h1><u>Gestion galerie photos</u></h1>
         <div class="container">
             <div class="row">
-                <div id="results_box"></div>
-                <div id="pagination_controls"></div>
                    <div id="photosGalerie">
+                       <h2>Photos en ligne</h2>
+                       <p>Dans le tableau ci dessous vous pouvez consulter les photos qui sont actuellement présentées dans la page galerie</p>
                         <?php $gestionGalerie->paginationGalerie(); ?>
                     </div>
+                    <br /><br /><br />
                 <div class="col s12 m12 l12">
+                    <hr><hr>
+                    <h3>Ajouter photo</h3>
                     <form action="" method="POST" name="formPhotoGalery" enctype="multipart/form-data">
                         <div class="container">
                             <div class="row">
@@ -58,6 +64,8 @@ if ($id_droits != 20260) {
                     </form>
                 </div>
                 <div class="col s12 m12 l12">
+                    <hr><hr>
+                    <h4>Ajouter Catégorie</h4>
                     <?php $gestionGalerie->actualCategory(); ?>
                     <form action="" method="POST" name="formCategoryGalery">
                         <input type="text" name="newGaleryCategory">
