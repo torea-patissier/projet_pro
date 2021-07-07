@@ -35,7 +35,6 @@
 </footer>
 <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
 <script src="../js/materialize.min.js"></script>
-<script src="../js/lightbox.js"></script>
 <script src="../js/script.js"></script>
 </body>
 

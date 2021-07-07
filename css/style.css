@@ -81,17 +81,24 @@ a{
 
 .coco{
   display: flex;
-  justify-content:row;
+  justify-content: row;
 }
 
 .resteEnBas{
   height: 80vh;
 }
 
-.imgGalerie{
-  width: 300px;
-  height: 300px;
-  margin: 50px;
+.grid {
+  padding: 16px;
+  display: grid;
+  justify-content: center;
+  grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+  grid-gap: 16px;
+}
+
+.grid img{
+  display: block;
+  width: 100%;
 }
 
 

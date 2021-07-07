@@ -6,9 +6,9 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
     <link rel="stylesheet" href="../css/materialize.min.css">
-    <link rel="stylesheet" href="../css/lightbox.min.css">
     <link rel="stylesheet" type="text/css" href="../css/style.css">
-    <script src="../js/lightbox-plus-jquery.min.js"></script>
+    <link rel="stylesheet" type="text/css" href="../css/lightbox.css">
+    <script src="../js/lightbox.js" type="module" defer></script>
     <title>Marika coiffure</title>
 </head>
 

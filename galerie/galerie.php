@@ -18,9 +18,8 @@ if(isset($_GET["enfants"])){
 ?>
 
 <main>
-
-    <div>
-        <?php $galerie->galerieHommes(); ?>
+    <div class="grid">
+    <?php $galerie->galerieHommes(); ?>
     </div>
 </main>
 

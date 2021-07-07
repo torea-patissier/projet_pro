@@ -18,7 +18,9 @@ class galerie extends bdd {
             $categorieImg = $result["categorie"];
 
             ?>
-            <a href=".../Images_Galerie/<?php echo $encImg; ?>.jpg" data-lightbox="Photos" data-title="<?php $nomImg ?>"><img class="imgGalerie" src="../Images_Galerie/<?php echo $encImg ?>.jpg"></a>
+            <a href="../Images_Galerie/<?php echo $encImg ?>.jpg">
+                <img class="imgGalerie" src="../Images_Galerie/<?php echo $encImg ?>.jpg">
+            </a>
             <?php
         }
     }

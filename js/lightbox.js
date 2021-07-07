@@ -1,554 +1,137 @@
-/*!
- * Lightbox v2.11.3
- * by Lokesh Dhakar
- *
- * More info:
- * http://lokeshdhakar.com/projects/lightbox2/
- *
- * Copyright Lokesh Dhakar
- * Released under the MIT license
- * https://github.com/lokesh/lightbox2/blob/master/LICENSE
- *
- * @preserve
+import {enableBodyScroll, disableBodyScroll} from "../js/body-scroll-lock.js"
+//on importe depuis le fichier la fonction pour ne plus scroller le body
+/**
+ * @property {HTMLElement} element
+ * @property {string[]} images chemins des images de la lightbox
+ * @property {string[]} url Images actuelles affichées
+
  */
+class Lightbox {
 
-// Uses Node, AMD or browser globals to create a module.
-(function (root, factory) {
-    if (typeof define === 'function' && define.amd) {
-        // AMD. Register as an anonymous module.
-        define(['jquery'], factory);
-    } else if (typeof exports === 'object') {
-        // Node. Does not work with strict CommonJS, but
-        // only CommonJS-like environments that support module.exports,
-        // like Node.
-        module.exports = factory(require('jquery'));
-    } else {
-        // Browser globals (root is window)
-        root.lightbox = factory(root.jQuery);
-    }
-}(this, function ($) {
-
-  function Lightbox(options) {
-    this.album = [];
-    this.currentImageIndex = void 0;
-    this.init();
-
-    // options
-    this.options = $.extend({}, this.constructor.defaults);
-    this.option(options);
-  }
-
-  // Descriptions of all options available on the demo site:
-  // http://lokeshdhakar.com/projects/lightbox2/index.html#options
-  Lightbox.defaults = {
-    albumLabel: 'Image %1 of %2',
-    alwaysShowNavOnTouchDevices: false,
-    fadeDuration: 600,
-    fitImagesInViewport: true,
-    imageFadeDuration: 600,
-    // maxWidth: 800,
-    // maxHeight: 600,
-    positionFromTop: 50,
-    resizeDuration: 700,
-    showImageNumberLabel: true,
-    wrapAround: false,
-    disableScrolling: false,
-    /*
-    Sanitize Title
-    If the caption data is trusted, for example you are hardcoding it in, then leave this to false.
-    This will free you to add html tags, such as links, in the caption.
-
-    If the caption data is user submitted or from some other untrusted source, then set this to true
-    to prevent xss and other injection attacks.
-     */
-    sanitizeTitle: false
-  };
-
-  Lightbox.prototype.option = function(options) {
-    $.extend(this.options, options);
-  };
-
-  Lightbox.prototype.imageCountLabel = function(currentImageNum, totalImages) {
-    return this.options.albumLabel.replace(/%1/g, currentImageNum).replace(/%2/g, totalImages);
-  };
-
-  Lightbox.prototype.init = function() {
-    var self = this;
-    // Both enable and build methods require the body tag to be in the DOM.
-    $(document).ready(function() {
-      self.enable();
-      self.build();
-    });
-  };
-
-  // Loop through anchors and areamaps looking for either data-lightbox attributes or rel attributes
-  // that contain 'lightbox'. When these are clicked, start lightbox.
-  Lightbox.prototype.enable = function() {
-    var self = this;
-    $('body').on('click', 'a[rel^=lightbox], area[rel^=lightbox], a[data-lightbox], area[data-lightbox]', function(event) {
-      self.start($(event.currentTarget));
-      return false;
-    });
-  };
-
-  // Build html for the lightbox and the overlay.
-  // Attach event handlers to the new DOM elements. click click click
-  Lightbox.prototype.build = function() {
-    if ($('#lightbox').length > 0) {
-        return;
+    static init () { //Methode statique qui initie la lightbox
+        const links = Array.from(document.querySelectorAll('a[href$=".png"], a[href$=".jpg"], a[href$=".jpeg"]')) //On selectionne tous les liens qui mennent vers des fichiers avec  l'extension est celles contenues dans le tableau
+        const gallery = links.map(link => link.getAttribute('href'))//pour chaque lien je vais faire un map et recuperer directement l'attribut href
+        links.forEach(link => link.addEventListener('click', e => { //foreach - pour chaque lien, on ajoute un event listener click - lorsque l'on clique, on initie une fonction qui prend en parametre l'evenement
+                e.preventDefault() //stop le comportement par defaut
+                new Lightbox(e.currentTarget.getAttribute('href'), gallery //initie une nouvelle lightbox - on recupere l'evenement, on selectionne le lien sur lequel on vient de cliquer et on recupere l'url du lien
+                )
+            }))
     }
 
-    var self = this;
-
-    // The two root notes generated, #lightboxOverlay and #lightbox are given
-    // tabindex attrs so they are focusable. We attach our keyboard event
-    // listeners to these two elements, and not the document. Clicking anywhere
-    // while Lightbox is opened will keep the focus on or inside one of these
-    // two elements.
-    //
-    // We do this so we can prevent propogation of the Esc keypress when
-    // Lightbox is open. This prevents it from intefering with other components
-    // on the page below.
-    //
-    // Github issue: https://github.com/lokesh/lightbox2/issues/663
-    $('<div id="lightboxOverlay" tabindex="-1" class="lightboxOverlay"></div><div id="lightbox" tabindex="-1" class="lightbox"><div class="lb-outerContainer"><div class="lb-container"><img class="lb-image" src="data:image/gif;base64,R0lGODlhAQABAIAAAP///wAAACH5BAEAAAAALAAAAAABAAEAAAICRAEAOw==" alt=""/><div class="lb-nav"><a class="lb-prev" aria-label="Previous image" href="" ></a><a class="lb-next" aria-label="Next image" href="" ></a></div><div class="lb-loader"><a class="lb-cancel"></a></div></div></div><div class="lb-dataContainer"><div class="lb-data"><div class="lb-details"><span class="lb-caption"></span><span class="lb-number"></span></div><div class="lb-closeContainer"><a class="lb-close"></a></div></div></div></div>').appendTo($('body'));
-
-    // Cache jQuery objects
-    this.$lightbox       = $('#lightbox');
-    this.$overlay        = $('#lightboxOverlay');
-    this.$outerContainer = this.$lightbox.find('.lb-outerContainer');
-    this.$container      = this.$lightbox.find('.lb-container');
-    this.$image          = this.$lightbox.find('.lb-image');
-    this.$nav            = this.$lightbox.find('.lb-nav');
-
-    // Store css values for future lookup
-    this.containerPadding = {
-      top: parseInt(this.$container.css('padding-top'), 10),
-      right: parseInt(this.$container.css('padding-right'), 10),
-      bottom: parseInt(this.$container.css('padding-bottom'), 10),
-      left: parseInt(this.$container.css('padding-left'), 10)
-    };
-
-    this.imageBorderWidth = {
-      top: parseInt(this.$image.css('border-top-width'), 10),
-      right: parseInt(this.$image.css('border-right-width'), 10),
-      bottom: parseInt(this.$image.css('border-bottom-width'), 10),
-      left: parseInt(this.$image.css('border-left-width'), 10)
-    };
-
-    // Attach event handlers to the newly minted DOM elements
-    this.$overlay.hide().on('click', function() {
-      self.end();
-      return false;
-    });
-
-    this.$lightbox.hide().on('click', function(event) {
-      if ($(event.target).attr('id') === 'lightbox') {
-        self.end();
-      }
-    });
-
-    this.$outerContainer.on('click', function(event) {
-      if ($(event.target).attr('id') === 'lightbox') {
-        self.end();
-      }
-      return false;
-    });
-
-    this.$lightbox.find('.lb-prev').on('click', function() {
-      if (self.currentImageIndex === 0) {
-        self.changeImage(self.album.length - 1);
-      } else {
-        self.changeImage(self.currentImageIndex - 1);
-      }
-      return false;
-    });
-
-    this.$lightbox.find('.lb-next').on('click', function() {
-      if (self.currentImageIndex === self.album.length - 1) {
-        self.changeImage(0);
-      } else {
-        self.changeImage(self.currentImageIndex + 1);
-      }
-      return false;
-    });
-
-    /*
-      Show context menu for image on right-click
-
-      There is a div containing the navigation that spans the entire image and lives above of it. If
-      you right-click, you are right clicking this div and not the image. This prevents users from
-      saving the image or using other context menu actions with the image.
-
-      To fix this, when we detect the right mouse button is pressed down, but not yet clicked, we
-      set pointer-events to none on the nav div. This is so that the upcoming right-click event on
-      the next mouseup will bubble down to the image. Once the right-click/contextmenu event occurs
-      we set the pointer events back to auto for the nav div so it can capture hover and left-click
-      events as usual.
-     */
-    this.$nav.on('mousedown', function(event) {
-      if (event.which === 3) {
-        self.$nav.css('pointer-events', 'none');
-
-        self.$lightbox.one('contextmenu', function() {
-          setTimeout(function() {
-              this.$nav.css('pointer-events', 'auto');
-          }.bind(self), 0);
-        });
-      }
-    });
-
-
-    this.$lightbox.find('.lb-loader, .lb-close').on('click', function() {
-      self.end();
-      return false;
-    });
-  };
-
-  // Show overlay and lightbox. If the image is part of a set, add siblings to album array.
-  Lightbox.prototype.start = function($link) {
-    var self    = this;
-    var $window = $(window);
-
-    $window.on('resize', $.proxy(this.sizeOverlay, this));
-
-    this.sizeOverlay();
-
-    this.album = [];
-    var imageNumber = 0;
-
-    function addToAlbum($link) {
-      self.album.push({
-        alt: $link.attr('data-alt'),
-        link: $link.attr('href'),
-        title: $link.attr('data-title') || $link.attr('title')
-      });
-    }
-
-    // Support both data-lightbox attribute and rel attribute implementations
-    var dataLightboxValue = $link.attr('data-lightbox');
-    var $links;
-
-    if (dataLightboxValue) {
-      $links = $($link.prop('tagName') + '[data-lightbox="' + dataLightboxValue + '"]');
-      for (var i = 0; i < $links.length; i = ++i) {
-        addToAlbum($($links[i]));
-        if ($links[i] === $link[0]) {
-          imageNumber = i;
-        }
-      }
-    } else {
-      if ($link.attr('rel') === 'lightbox') {
-        // If image is not part of a set
-        addToAlbum($link);
-      } else {
-        // If image is part of a set
-        $links = $($link.prop('tagName') + '[rel="' + $link.attr('rel') + '"]');
-        for (var j = 0; j < $links.length; j = ++j) {
-          addToAlbum($($links[j]));
-          if ($links[j] === $link[0]) {
-            imageNumber = j;
-          }
-        }
-      }
-    }
-
-    // Position Lightbox
-    var top  = $window.scrollTop() + this.options.positionFromTop;
-    var left = $window.scrollLeft();
-    this.$lightbox.css({
-      top: top + 'px',
-      left: left + 'px'
-    }).fadeIn(this.options.fadeDuration);
-
-    // Disable scrolling of the page while open
-    if (this.options.disableScrolling) {
-      $('body').addClass('lb-disable-scrolling');
-    }
-
-    this.changeImage(imageNumber);
-  };
-
-  // Hide most UI elements in preparation for the animated resizing of the lightbox.
-  Lightbox.prototype.changeImage = function(imageNumber) {
-    var self = this;
-    var filename = this.album[imageNumber].link;
-    var filetype = filename.split('.').slice(-1)[0];
-    var $image = this.$lightbox.find('.lb-image');
-
-    // Disable keyboard nav during transitions
-    this.disableKeyboardNav();
-
-    // Show loading state
-    this.$overlay.fadeIn(this.options.fadeDuration);
-    $('.lb-loader').fadeIn('slow');
-    this.$lightbox.find('.lb-image, .lb-nav, .lb-prev, .lb-next, .lb-dataContainer, .lb-numbers, .lb-caption').hide();
-    this.$outerContainer.addClass('animating');
-
-    // When image to show is preloaded, we send the width and height to sizeContainer()
-    var preloader = new Image();
-    preloader.onload = function() {
-      var $preloader;
-      var imageHeight;
-      var imageWidth;
-      var maxImageHeight;
-      var maxImageWidth;
-      var windowHeight;
-      var windowWidth;
-
-      $image.attr({
-        'alt': self.album[imageNumber].alt,
-        'src': filename
-      });
-
-      $preloader = $(preloader);
-
-      $image.width(preloader.width);
-      $image.height(preloader.height);
-      windowWidth = $(window).width();
-      windowHeight = $(window).height();
-
-      // Calculate the max image dimensions for the current viewport.
-      // Take into account the border around the image and an additional 10px gutter on each side.
-      maxImageWidth  = windowWidth - self.containerPadding.left - self.containerPadding.right - self.imageBorderWidth.left - self.imageBorderWidth.right - 20;
-      maxImageHeight = windowHeight - self.containerPadding.top - self.containerPadding.bottom - self.imageBorderWidth.top - self.imageBorderWidth.bottom - self.options.positionFromTop - 70;
-
-      /*
-      Since many SVGs have small intrinsic dimensions, but they support scaling
-      up without quality loss because of their vector format, max out their
-      size.
-      */
-      if (filetype === 'svg') {
-        $image.width(maxImageWidth);
-        $image.height(maxImageHeight);
-      }
-
-      // Fit image inside the viewport.
-      if (self.options.fitImagesInViewport) {
-
-        // Check if image size is larger then maxWidth|maxHeight in settings
-        if (self.options.maxWidth && self.options.maxWidth < maxImageWidth) {
-          maxImageWidth = self.options.maxWidth;
-        }
-        if (self.options.maxHeight && self.options.maxHeight < maxImageHeight) {
-          maxImageHeight = self.options.maxHeight;
-        }
-
-      } else {
-        maxImageWidth = self.options.maxWidth || preloader.width || maxImageWidth;
-        maxImageHeight = self.options.maxHeight || preloader.height || maxImageHeight;
-      }
-
-      // Is the current image's width or height is greater than the maxImageWidth or maxImageHeight
-      // option than we need to size down while maintaining the aspect ratio.
-      if ((preloader.width > maxImageWidth) || (preloader.height > maxImageHeight)) {
-        if ((preloader.width / maxImageWidth) > (preloader.height / maxImageHeight)) {
-          imageWidth  = maxImageWidth;
-          imageHeight = parseInt(preloader.height / (preloader.width / imageWidth), 10);
-          $image.width(imageWidth);
-          $image.height(imageHeight);
-        } else {
-          imageHeight = maxImageHeight;
-          imageWidth = parseInt(preloader.width / (preloader.height / imageHeight), 10);
-          $image.width(imageWidth);
-          $image.height(imageHeight);
-        }
-      }
-      self.sizeContainer($image.width(), $image.height());
-    };
-
-    // Preload image before showing
-    preloader.src = this.album[imageNumber].link;
-    this.currentImageIndex = imageNumber;
-  };
-
-  // Stretch overlay to fit the viewport
-  Lightbox.prototype.sizeOverlay = function() {
-    var self = this;
-    /*
-    We use a setTimeout 0 to pause JS execution and let the rendering catch-up.
-    Why do this? If the `disableScrolling` option is set to true, a class is added to the body
-    tag that disables scrolling and hides the scrollbar. We want to make sure the scrollbar is
-    hidden before we measure the document width, as the presence of the scrollbar will affect the
-    number.
+   /**
+    * @param {string} url URL de l'image
+    * @param {string[]} images chemins des images de la lightbox
     */
-    setTimeout(function() {
-      self.$overlay
-        .width($(document).width())
-        .height($(document).height());
+   constructor (url, images) { // contructeur qui prend en parametre l'url et images(tableau contenant toutes les mimages)
+       this.element = this.buildDOM(url) //on construit notre dom a partir de l'url . this.element permettra d'acceder a l'element partout dans le code
+       this.images = images //on definit dans la propriete images le parametre que l'on vient de recevoir
+       this.loadImage(url) //on charge l'image sur laquelle on a cliqué
+       this.onKeyUp = this.onKeyUp.bind(this)
+       document.body.appendChild(this.element) // on ajoute l'element - la lightbox
+       disableBodyScroll(this.element) //Quand on charge la lightbox, on désactive le scroll de la page (body)
+       document.addEventListener('keyup', this.onKeyUp) //Des qu'on charge le systeme, on rajoute le keyUp
+   }
 
-    }, 0);
-  };
-
-  // Animate the size of the lightbox to fit the image we are showing
-  // This method also shows the the image.
-  Lightbox.prototype.sizeContainer = function(imageWidth, imageHeight) {
-    var self = this;
-
-    var oldWidth  = this.$outerContainer.outerWidth();
-    var oldHeight = this.$outerContainer.outerHeight();
-    var newWidth  = imageWidth + this.containerPadding.left + this.containerPadding.right + this.imageBorderWidth.left + this.imageBorderWidth.right;
-    var newHeight = imageHeight + this.containerPadding.top + this.containerPadding.bottom + this.imageBorderWidth.top + this.imageBorderWidth.bottom;
-
-    function postResize() {
-      self.$lightbox.find('.lb-dataContainer').width(newWidth);
-      self.$lightbox.find('.lb-prevLink').height(newHeight);
-      self.$lightbox.find('.lb-nextLink').height(newHeight);
-
-      // Set focus on one of the two root nodes so keyboard events are captured.
-      self.$overlay.focus();
-
-      self.showImage();
-    }
-
-    if (oldWidth !== newWidth || oldHeight !== newHeight) {
-      this.$outerContainer.animate({
-        width: newWidth,
-        height: newHeight
-      }, this.options.resizeDuration, 'swing', function() {
-        postResize();
-      });
-    } else {
-      postResize();
-    }
-  };
-
-  // Display the image and its details and begin preload neighboring images.
-  Lightbox.prototype.showImage = function() {
-    this.$lightbox.find('.lb-loader').stop(true).hide();
-    this.$lightbox.find('.lb-image').fadeIn(this.options.imageFadeDuration);
-
-    this.updateNav();
-    this.updateDetails();
-    this.preloadNeighboringImages();
-    this.enableKeyboardNav();
-  };
-
-  // Display previous and next navigation if appropriate.
-  Lightbox.prototype.updateNav = function() {
-    // Check to see if the browser supports touch events. If so, we take the conservative approach
-    // and assume that mouse hover events are not supported and always show prev/next navigation
-    // arrows in image sets.
-    var alwaysShowNav = false;
-    try {
-      document.createEvent('TouchEvent');
-      alwaysShowNav = (this.options.alwaysShowNavOnTouchDevices) ? true : false;
-    } catch (e) {}
-
-    this.$lightbox.find('.lb-nav').show();
-
-    if (this.album.length > 1) {
-      if (this.options.wrapAround) {
-        if (alwaysShowNav) {
-          this.$lightbox.find('.lb-prev, .lb-next').css('opacity', '1');
+    /**
+     * @param {string} url URL de l'image
+     */
+   loadImage (url){ //methode qui charge le loader, une fois l'image chargée le loader disparait et affiche l'image
+        this.url = null //Lorsque qu'on fait un loadImage, l'url sera null
+        const image = new Image(); //On crée une nouvelle image
+        const container = this.element.querySelector('.lightbox__container') //On selection l'element qui a comme class .lightbox__container
+        const loader = document.createElement('div') //On crée un element qui sera une div
+        loader.classList.add('lightbox__loader') //on ajoute au loader la classe lightbox__loader
+        container.innerHTML = '' //On vide la precedente image dans l'url
+        container.appendChild(loader) //on y ajoute a container le loader
+        image.onload = () => { //lorsque l'image est bien chargée
+            container.removeChild(loader) //On supprime l'enfant loader // cache le loader
+            container.appendChild(image) //On ajouter l'enfant image // on affiche l'image
+            this.url = url //Quand l'image sera chargée, l'url prend la valeur de l'url d'image
         }
-        this.$lightbox.find('.lb-prev, .lb-next').show();
-      } else {
-        if (this.currentImageIndex > 0) {
-          this.$lightbox.find('.lb-prev').show();
-          if (alwaysShowNav) {
-            this.$lightbox.find('.lb-prev').css('opacity', '1');
-          }
+        image.src = url
+   }
+    /**
+     * Ferme la lightbox
+     * @param {KeyboardEvent} e
+     */
+   onKeyUp (e) { //Methode qui prend en parametre un evenement de type keyboard event
+        if (e.key === 'Escape') { //si la clé qui est pressée c'est escape/echape
+            this.close(e) //on ferme l'evenement (lightbox)
+        } else if (e.key === 'ArrowLeft') { //si on appuie sur la fleche de gauche
+            this.prev(e) //On passe a l'image precedente
+        } else if (e.key === 'ArrowRight') { //si on appuie sur la fleche de droite
+            this.next(e) //On passe a la prochaine image
         }
-        if (this.currentImageIndex < this.album.length - 1) {
-          this.$lightbox.find('.lb-next').show();
-          if (alwaysShowNav) {
-            this.$lightbox.find('.lb-next').css('opacity', '1');
-          }
+    }
+
+    /**
+     * Ferme la lightbox
+     * @param {MouseEvent|KeyboardEvent} e
+     */
+   close (e) { //fonction qui ferme la lightbox
+    e.preventDefault() //on annule le comportement par defaut du bouton
+        this.element.classList.add('fadeOut') //On prend l'element (lightbox) et on ajoute la classe fadeOut
+        enableBodyScroll(this.element) //quand on ferme la lightbox, on reactive le scroll de la page (body)
+        window.setTimeout(() => { //au bout de 500 milisecondes on supprime la lightbox
+            this.element.parentElement.removeChild(this.element)  //
+        }, 500) //
+        document.removeEventListener('keyup', this.onKeyUp) //on supprime l'evement pour qu'il ne reste pas en memoire - nettoie le listener pour qu'il ne soit pas déclenché plusieurs fois
+   }
+
+    /**
+     * prochaine image de la lightbox
+     * @param {MouseEvent|KeyboardEvent} e
+     */
+
+    next (e) { //methode pour passer a la prochaine image
+        e.preventDefault() //on empeche le comportement inital du bouton
+        let i = this.images.findIndex(image => image === this.url) //je trouve l'index
+        if (i === this.images.length -1){ //Si l'index est égal au nombre d'images qu'on a -1 ça veut dire que l'on est au bout, on defini i = -1 pour revenir au debut
+            i = -1
         }
-      }
+        this.loadImage(this.images[i + 1]) //on charge l'image qui sera a l'index +1 (prochaine)
+   }
+
+    /**
+     * precedente image de la lightbox
+     * @param {MouseEvent|KeyboardEvent} e
+     */
+
+    prev (e) { //methode pour revenir a l'image precedente
+        e.preventDefault() //on empeche le comportement inital du bouton
+        let i = this.images.findIndex(image => image === this.url) //je trouve l'index
+        if (i === 0){
+            i = this.images.length
+        }
+        this.loadImage(this.images[i - 1]) //on charge l'image qui sera a l'index -1 (precedente)
     }
-  };
-
-  // Display caption, image number, and closing button.
-  Lightbox.prototype.updateDetails = function() {
-    var self = this;
-
-    // Enable anchor clicks in the injected caption html.
-    // Thanks Nate Wright for the fix. @https://github.com/NateWr
-    if (typeof this.album[this.currentImageIndex].title !== 'undefined' &&
-      this.album[this.currentImageIndex].title !== '') {
-      var $caption = this.$lightbox.find('.lb-caption');
-      if (this.options.sanitizeTitle) {
-        $caption.text(this.album[this.currentImageIndex].title);
-      } else {
-        $caption.html(this.album[this.currentImageIndex].title);
-      }
-      $caption.fadeIn('fast');
-    }
-
-    if (this.album.length > 1 && this.options.showImageNumberLabel) {
-      var labelText = this.imageCountLabel(this.currentImageIndex + 1, this.album.length);
-      this.$lightbox.find('.lb-number').text(labelText).fadeIn('fast');
-    } else {
-      this.$lightbox.find('.lb-number').hide();
-    }
-
-    this.$outerContainer.removeClass('animating');
-
-    this.$lightbox.find('.lb-dataContainer').fadeIn(this.options.resizeDuration, function() {
-      return self.sizeOverlay();
-    });
-  };
-
-  // Preload previous and next images in set.
-  Lightbox.prototype.preloadNeighboringImages = function() {
-    if (this.album.length > this.currentImageIndex + 1) {
-      var preloadNext = new Image();
-      preloadNext.src = this.album[this.currentImageIndex + 1].link;
-    }
-    if (this.currentImageIndex > 0) {
-      var preloadPrev = new Image();
-      preloadPrev.src = this.album[this.currentImageIndex - 1].link;
-    }
-  };
-
-  Lightbox.prototype.enableKeyboardNav = function() {
-    this.$lightbox.on('keyup.keyboard', $.proxy(this.keyboardAction, this));
-    this.$overlay.on('keyup.keyboard', $.proxy(this.keyboardAction, this));
-  };
-
-  Lightbox.prototype.disableKeyboardNav = function() {
-    this.$lightbox.off('.keyboard');
-    this.$overlay.off('.keyboard');
-  };
-
-  Lightbox.prototype.keyboardAction = function(event) {
-    var KEYCODE_ESC        = 27;
-    var KEYCODE_LEFTARROW  = 37;
-    var KEYCODE_RIGHTARROW = 39;
-
-    var keycode = event.keyCode;
-    if (keycode === KEYCODE_ESC) {
-      // Prevent bubbling so as to not affect other components on the page.
-      event.stopPropagation();
-      this.end();
-    } else if (keycode === KEYCODE_LEFTARROW) {
-      if (this.currentImageIndex !== 0) {
-        this.changeImage(this.currentImageIndex - 1);
-      } else if (this.options.wrapAround && this.album.length > 1) {
-        this.changeImage(this.album.length - 1);
-      }
-    } else if (keycode === KEYCODE_RIGHTARROW) {
-      if (this.currentImageIndex !== this.album.length - 1) {
-        this.changeImage(this.currentImageIndex + 1);
-      } else if (this.options.wrapAround && this.album.length > 1) {
-        this.changeImage(0);
-      }
-    }
-  };
-
-  // Closing time. :-(
-  Lightbox.prototype.end = function() {
-    this.disableKeyboardNav();
-    $(window).off('resize', this.sizeOverlay);
-    this.$lightbox.fadeOut(this.options.fadeDuration);
-    this.$overlay.fadeOut(this.options.fadeDuration);
-
-    if (this.options.disableScrolling) {
-      $('body').removeClass('lb-disable-scrolling');
-    }
-  };
-
-  return new Lightbox();
-}));
+    /**
+     * @param {string} url URL de l'image
+     * @return {HTMLElement}
+     */
+   buildDOM(url){ //Methode qui retourne un url
+       const dom = document.createElement('div') //on crée un nouvel element qui sera une liste
+        dom.classList.add('lightbox') //on ajoute la classe lightbox
+        dom.innerHTML = `<button class="lightbox__close">Fermer</button> 
+            <button class="lightbox__next">Suivant</button>
+            <button class="lightbox__prev">Précédent</button>
+            <div class="lightbox__container"></div>`
+        dom.querySelector('.lightbox__close').addEventListener('click', //on selectionne l'element et lorsque l'on clique dessus on execute une fonction
+            this.close.bind(this))
+        dom.querySelector('.lightbox__next').addEventListener('click',  //on selectionne l'element et lorsque l'on clique dessus on execute une fonction
+            this.next.bind(this))
+        dom.querySelector('.lightbox__prev').addEventListener('click',  //on selectionne l'element et lorsque l'on clique dessus on execute une fonction
+            this.prev.bind(this))
+        return dom
+   }
+}
+/**
+ <div class="lightbox">
+ <button class="lightbox__close">Fermer</button>
+ <button class="lightbox__next">Suivant</button>
+ <button class="lightbox__prev">Précédent</button>
+ <div class="lightbox__container">
+ <img src="https://picsum.photos/900/1800" alt="">
+ </div>
+ </div> **/
+Lightbox.init(); //Des le chargement de la plage d'initier la livebox
