@@ -67,8 +67,8 @@ $pageIndex = new index();
 
                     <form id="formIndex" method="" action="">
                         <input type="text" id="avis" name="avis">
+                        <input class="btn black" type="submit" id="envoyerCommentaire" name="envoyerCommentaire">
                     </form>
-                    <input class="btn black" type="submit" id="envoyerCommentaire" name="envoyerCommentaire">
 
                     <div id="response"></div>
 
@@ -85,9 +85,9 @@ $pageIndex = new index();
     <div class="container">
         <h2 class="txtIndex left-align">Nos marques</h2>
         <div class="row">
-            <img class="col s12 m4 l4" src="images/furterer.png" alt="furterer">
-            <img class="col s12 m4 l4" src="images/great-lengths.png" alt="great-lengths">
-            <img class="col s12 m4 l4" src="images/wella.png" alt="wella">
+            <img class="col s12 m4 l4" src="Images/furterer.png" alt="furterer">
+            <img class="col s12 m4 l4" src="Images/great-lengths.png" alt="great-lengths">
+            <img class="col s12 m4 l4" src="Images/wella.png" alt="wella">
         </div>
     </div>
     <!-- Div N3 -->

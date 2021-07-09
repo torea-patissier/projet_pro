@@ -1,71 +1,91 @@
-M.AutoInit(); // Permet de charger toutes les animations JS de Materialize
+M.AutoInit();
 
-$(document).ready(function () {
-  function showdata() {//  Fonction pour afficher les commentaires sur INDEX.HTML de façon Asynchrone
-
-    $.ajax({
-      url: "action.php", // Récupère les résultats de echo $pageAction->voirAvisClients();
-      success : function (result) { // result == résultat PHP
-        data = JSON.parse(result); // data == result sous format JSON
-        //console.log(data); // On peut console result pour voir le format de result dans la console
-        //console.log(result); // On peut console data pour voir le format de data dans la console
-
-        data.forEach((result) => {
-          // Boucle for each en Jquery
-          $("#afficherCommentaire").append(
-            `<p>${result.avis} <br/> ${result.prenom} ${result.nom}</p>`
-          );
-        });
-      },
-    });
-  }
-  showdata();
-});
+afficherCommentaire();
 
 
-
-//Backoffice
 function showHideAddProduct() {
-  var divAddProducts = document.getElementById("formAddProduct"); // ID du formulaire
-  var tableViewProducts = document.getElementById("tableProduct"); // ID table
+  let divAddProducts = document.getElementById("formAddProduct");
+  let tableViewProducts = document.getElementById("tableProduct");
+  let speechAjoutProduit = document.getElementById("divAjouterProduit");
   if (divAddProducts.style.display === "block") {
-    // Si formulaire afficher
-    divAddProducts.style.display = "none"; // Form == display none
-    tableViewProducts.style.display = "block"; // Table == display block
+    divAddProducts.style.display = "none";
+    tableViewProducts.style.display = "block";
+    speechAjoutProduit.style.display = "block";
   } else {
-    divAddProducts.style.display = "block"; // Formulaire == block
-    tableViewProducts.style.display = "none"; // Table none
+    divAddProducts.style.display = "block";
+    tableViewProducts.style.display = "none";
+    speechAjoutProduit.style.display = "none";
   }
 }
 
-//Backoffice
 function modifyProductsHideForms() {
-  const tableToHide = document.getElementById("tableProducts"); // ID table
-  const modify = document.getElementById("modifyProduct"); // ID form modifier produit
+  const tableToHide = document.getElementById("tableProducts");
+  const modify = document.getElementById("modifyProduct");
+
   modify.addEventListener("click", () => {
-    // Si click sur element modifier produit
-    tableToHide.style.display = "none"; // Table DisNone
+    tableToHide.style.display = "none";
   });
 }
 
+function hideToModify(){
+  let mainHide = document.getElementById("mainProduits"); //Je recupère l'id du main
+  if (window.location.search.indexOf('show') > -1) { //Si l'index "show" est present dans l'url,
+    mainHide.style.display = "none"; //on cache le main
+  }
+}
+hideToModify(); //Execution de la function au dessus
+
+function hideToModifyUsers(){
+  let mainUsersHide = document.getElementById("mainUsers");
+  if (window.location.search.indexOf('userModif') > -1) { //Si l'index "show" est present dans l'url,
+    mainUsersHide.style.display = "none";
+  }
+}
+hideToModifyUsers();//Execution de la function au dessus
 
 
-// $(document).ready(function(){
-//     $("#envoyerCommentaire").click(function(e){
-//         e.preventDefault();
-//          const commentaire = $("#avis").serialize(); // L'id du formulaire HTML devient la var commentaire donc #avis == var commentaire
-//         if(commentaire != ""){
-//             $.ajax({
-//                 url: "action.php",
-//                 type: "POST",
-//                 data: commentaire,
-//                 success: function (data){
-//                     console.log(commentaire);
-//                 }
-//             })
+//Envoyer un commentaire depuis la page index
+document.getElementById('formIndex').addEventListener('submit',function(e){ // Récup ID du formulaire // quand submit
 
-//         }else{
-//             $("#response").html(' Remplissez le champs');
-//         }
-//     })
-// })
+  e.preventDefault(); // Evite le rechargement de la page
+  var avisClient = document.getElementById('avis').value; // On récupère l'id du formulaire avis client
+  var xhr = new XMLHttpRequest(); // Instancier obj XHR
+
+  xhr.onload = function(){
+    afficherCommentaire();  // Une fois le commentaire envoyé, on va l'afficher  avec la F afficherCom
+    avisClient.innerHTML = '';
+ }
+
+  xhr.open('POST', 'action.php', true); // Requête ajax
+  xhr.setRequestHeader('Content-Type', 'application/x-www-form-urlencoded');
+  xhr.send('newCom='+avisClient); // CF l6 action.php
+})
+//Envoyer un commentaire depuis la page index
+
+
+//Voir les commentaires de la page index
+function afficherCommentaire() {
+
+  var xhr2 = new XMLHttpRequest();
+
+  xhr2.onload = function (){ // Au chargement on execute cette fonction
+
+    var RepCom = document.getElementById('response'); // La var récup l'id de la variable vide sur index
+    var retour = JSON.parse(this.responseText); // Retour = le résultat du texte au format JSON contenu dans voirCom
+    console.log(retour);
+    var block = ''; // Instancier var vide
+
+    for(var y in retour){ // Equiv foreach Php
+      block += '<div class="avisClient">';
+      block += '<p>' + retour[y].avis + '</p>'; // On récupère l'avis en bdd
+      block += '<p class="right-align"> Posté par : ' + retour[y].prenom + '<p>'; // On récupère le prénom en bdd
+      block += '</div>';
+    }
+     RepCom.innerHTML = block; // Dans la div response on envoi les éléments de la boucle for
+
+  }
+  
+  xhr2.open('GET','action.php',true); // Requête AJAX
+  xhr2.setRequestHeader('Content-Type', 'application/x-www-form-urlencoded');
+  xhr2.send('voirCom'); // voirCom est un élément HTML qu'on  créé, CF action.php
+}//Voir les commentaires de la page index

@@ -1,20 +1,54 @@
+@import url("https://fonts.googleapis.com/css2?family=Montserrat&display=swap");
 @import url('https://fonts.googleapis.com/css2?family=Dancing+Script:wght@700&display=swap');
 
-/* Pour garder un footer en bas de page */
 body {
-    display: flex;
-    min-height: 100vh;
-    flex-direction: column;
-  }
+  margin: 0;
+  padding: 0;
+  /* GARDE LE FOOTER EN BAS DE PAGE */
+  position: relative;
+  padding-bottom: 250.22px;
+  /* PADDING BOTTOM == INSPECTER  LA TAILLE DU FOOTER (1000 x 250.22)  */
+  min-height: 100vh;
+  /* GARDE LE FOOTER EN BAS DE PAGE */
+}
 
-  main {
-    flex: 1 0 auto;
-  }
+#btn_backoffice {
+  margin-top: 3em;
+}
+
+.btnProduits {
+  margin-top: 3em !important;
+}
+
+/* PRODUITS */
+.divProduits{
+  display:flex;
+  flex-direction:row;  
+  flex-wrap: wrap;
+
+}
+.coco{
+  padding: 30px;
+}
+
+
+ 
+
+/* Pour garder un footer en bas de page */
+/* body {
+  display: flex;
+  min-height: 100vh;
+  flex-direction: column;
+}
+
+main {
+  flex: 1 0 auto;
+} */
 /* Pour garder un footer en bas de page */
 
 /* Liens Footer */
 .aFooter{
-color: white;
+  color: white;
 }
 
 /* Navbar & Footer */
@@ -39,7 +73,7 @@ a{
   justify-content: space-between;
 }
 /* Police Index */
-.txtIndex{ 
+.txtIndex{
   font-family: 'Dancing Script', cursive;
 }
 /* Couleur de la div0 */
@@ -51,11 +85,21 @@ a{
   background-color: #A0AF81;
 }
 /* Parallax Index */
-.parallax{ 
+.parallax{
   transform: translateY(250px);
 }
 
-.coco{
-  display: flex;
-  justify-content:row;
+.imgGalerie{
+  width: 300px;
+  height: 300px;
+  margin: 50px;
 }
+
+/* GARDE LE FOOTER EN BAS DE PAGE */
+footer{
+  position: absolute;
+  bottom: 0;
+  width: 100%;
+}
+/* GARDE LE FOOTER EN BAS DE PAGE */
+

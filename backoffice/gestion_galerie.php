@@ -3,32 +3,44 @@ session_start();
 require_once('../html_partials/header.php');
 include '../autoloader.php';
 $gestionGalerie = new backOffice;
-// if ($id_droits != 2) {
-//     header('location:http://localhost:8888/boutique/Error/404.php');
-//     exit();
-// }
+
+$id_droits = $_SESSION['user']['id_droits'];
+if ($id_droits != 20260) {
+    header('location:http://localhost:8888/projet_pro/404.php');
+    exit();
+}
 
     if(isset($_POST["sendNewGaleryCategory"]) && !empty($_POST["newGaleryCategory"])){
         $gestionGalerie->addNewGaleryCategory();
-        header('location:http://localhost:8888/projet_pro/backoffice/gestion_galerie.php');
+        header('location:http://localhost:8888/projet_pro/backoffice/gestion_galerie.php?page=1');
     }
 
     if(isset($_POST["sendNewGaleryPhoto"]) && !empty($_POST["nameNewPhoto"])){
         $gestionGalerie->newPhoto();
-        header('location:http://localhost:8888/projet_pro/backoffice/gestion_galerie.php');
+        header('location:http://localhost:8888/projet_pro/backoffice/gestion_galerie.php?page=1');
     }
 
     $gestionGalerie->deletePhoto();
+
+    if (isset($_GET['deleteGCategory']) and !empty($_GET['deleteGCategory'])) {
+        $gestionGalerie->deleteGCategory();
+    }
+
 ?>
 <main>
     <div class="container fluid center-align">
-        <h1>Gestion galerie photos</h1>
+        <h1><u>Gestion galerie photos</u></h1>
         <div class="container">
             <div class="row">
-                <div id="photosGalerie">
-                    <?php $gestionGalerie->viewAllPhotos(); ?>
-                </div>
+                   <div id="photosGalerie">
+                       <h2>Photos en ligne</h2>
+                       <p>Dans le tableau ci dessous vous pouvez consulter les photos qui sont actuellement présentées dans la page galerie</p>
+                        <?php $gestionGalerie->paginationGalerie(); ?>
+                    </div>
+                    <br /><br /><br />
                 <div class="col s12 m12 l12">
+                    <hr><hr>
+                    <h3>Ajouter photo</h3>
                     <form action="" method="POST" name="formPhotoGalery" enctype="multipart/form-data">
                         <div class="container">
                             <div class="row">
@@ -52,6 +64,8 @@ $gestionGalerie = new backOffice;
                     </form>
                 </div>
                 <div class="col s12 m12 l12">
+                    <hr><hr>
+                    <h4>Ajouter Catégorie</h4>
                     <?php $gestionGalerie->actualCategory(); ?>
                     <form action="" method="POST" name="formCategoryGalery">
                         <input type="text" name="newGaleryCategory">

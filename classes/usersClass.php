@@ -4,7 +4,7 @@ class users extends bdd
 {
     // Function pour s'inscrire
     public function register(){
-        if(isset($_POST['inscription']) && !empty($_POST['inscription'])){
+        if(isset($_POST['inscription'])){
             
             //Connexion Db
             $con = $this->connectDb();

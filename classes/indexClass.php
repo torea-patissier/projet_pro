@@ -21,7 +21,7 @@ class index extends bdd
         $req = $con->prepare("SELECT * FROM avis INNER JOIN utilisateurs ON avis.id_client = utilisateurs.id");
         $req->execute();
         $resultat = $req->fetchAll();
-        return json_encode($resultat); // Converti le resultat php en JSON pour l'afficher sur l'Index en Asynchrone
+        return $resultat; // Converti le resultat php en JSON pour l'afficher sur l'Index en Asynchrone
     }
 
     public function voirDerniersArticles() // Voi les 3 derniers articles en Bdd

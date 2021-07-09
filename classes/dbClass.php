@@ -3,7 +3,7 @@
 class bdd
 {
         //Function pour se connecter à la Db
-        protected function connectDb()
+        function connectDb()
         {
             $local = 'mysql:host=localhost;dbname=projet_pro';
             $user = 'root';

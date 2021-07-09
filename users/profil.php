@@ -17,7 +17,6 @@ if(isset($_POST['modifier'])){
 if(!$_SESSION['user']){
     header('location:http://localhost:8888/projet_pro/index.php');
 }
-
 ?>
 <main>
     <div class="center-align">

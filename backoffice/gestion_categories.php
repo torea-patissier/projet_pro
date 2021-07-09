@@ -3,10 +3,12 @@ session_start();
 require_once('../html_partials/header.php');
 include '../autoloader.php';
 $gestionCategories = new backOffice;
-// if ($id_droits != 2) {
-//     header('location:http://localhost:8888/boutique/Error/404.php');
-//     exit();
-// }
+
+$id_droits = $_SESSION['user']['id_droits'];
+if ($id_droits != 20260) {
+    header('location:http://localhost:8888/projet_pro/404.php');
+    exit();
+ }
 
 if (isset($_POST["valider"])) {
     if (!empty($_POST["newCategorie"])) {
@@ -18,6 +20,16 @@ if (isset($_POST["valider"])) {
         header('location:http://localhost:8888/projet_pro/backoffice/gestion_categories.php');
 
     }
+}
+
+if (isset($_GET['deletesc']) and !empty($_GET['deletesc'])) {
+
+    $gestionCategories->deleteSCategoryBdd();
+}
+
+if (isset($_GET['deletec']) and !empty($_GET['deletec'])) {
+
+    $gestionCategories->deleteCategoryBdd();
 }
 
 ?>
@@ -36,6 +48,7 @@ if (isset($_POST["valider"])) {
     echo "</div>";
     ?>
     <br /><br />
+
     <form name="Ajouter_Catégorie" action="" id="formcategorie" method="POST">
         <div class="container">
             <div class="row">
