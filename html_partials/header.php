@@ -16,11 +16,11 @@
 <header>
     <!-- Sidenav à mettre en navbar si écran mobile -->
     <ul id="dropdown1" class="dropdown-content">
-        <li><a href="#!">Hommes</a></li>
+        <li><a href="../galerie/galerie_hommes.php">Hommes</a></li>
         <li class="divider"></li>
-        <li><a href="#!">Femmes</a></li>
+        <li><a href="../galerie/galerie_femmes.php">Femmes</a></li>
         <li class="divider"></li>
-        <li><a href="#!">Enfants</a></li>
+        <li><a href="../galerie/galerie_enfants.php">Enfants</a></li>
     </ul>
     <nav>
         <div class="nav-wrapper">
