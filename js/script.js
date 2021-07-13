@@ -1,4 +1,5 @@
 M.AutoInit();
+afficherCommentaire();
 
 function showHideAddProduct() {
   let divAddProducts = document.getElementById("formAddProduct");
@@ -40,24 +41,51 @@ function hideToModifyUsers(){
 }
 hideToModifyUsers();//Execution de la function au dessus
 
-$(document).ready(function () {
-  function showdata() {//  Fonction pour afficher les commentaires sur INDEX.HTML de façon Asynchrone
+//Envoyer un commentaire depuis la page index
+document.getElementById('formIndex').addEventListener('submit',function(e){ // Récup ID du formulaire // quand submit
 
-    $.ajax({
-      url: "action.php", // Récupère les résultats de echo $pageAction->voirAvisClients();
-      success : function (result) { // result == résultat PHP
-        data = JSON.parse(result); // data == result sous format JSON
-        //console.log(data); // On peut console result pour voir le format de result dans la console
-        //console.log(result); // On peut console data pour voir le format de data dans la console
+  e.preventDefault(); // Evite le rechargement de la page
+  var avisClient = document.getElementById('avis').value; // On récupère l'id du formulaire avis client
+  var noteClient = document.getElementById('note').value; //On recupere la valeur de la note
+  var xhr = new XMLHttpRequest(); // Instancier obj XHR
 
-        data.forEach((result) => {
-          // Boucle for each en Jquery
-          $("#afficherCommentaire").append(
-              `<p>${result.avis} <br/> ${result.prenom} ${result.nom}</p>`
-          );
-        });
-      },
-    });
+  xhr.onload = function(){
+    afficherCommentaire();  // Une fois le commentaire envoyé, on va l'afficher  avec la F afficherCom
+    console.log(this.responseText);
   }
-  showdata();
-});
+
+  xhr.open('POST', 'action.php', true); // Requête ajax
+  xhr.setRequestHeader('Content-Type', 'application/x-www-form-urlencoded');
+  xhr.send('newCom='+avisClient+'&note='+noteClient); // CF l6 action.php ---- VOICI UN EXMPLE DE CONCATENATION DENVOIE D'INFORMATIONS EN AJAX
+  document.forms['formIndex'].reset(); //Vide les inputs du formulaire en question
+})
+//Envoyer un commentaire depuis la page index
+afficherCommentaire();
+
+//Voir les commentaires de la page index
+function afficherCommentaire() {
+
+  var xhr2 = new XMLHttpRequest();
+
+  xhr2.onload = function (){ // Au chargement on execute cette fonction
+
+    var RepCom = document.getElementById('response'); // La var récup l'id de la variable vide sur index
+    var retour = JSON.parse(this.responseText); // Retour = le résultat du texte au format JSON contenu dans voirCom
+    var block = ''; // Instancier var vide
+
+    for(var y in retour){ // Equiv foreach Php
+      block += '<div class="avisClient">';
+      block += '<p>' + retour[y].avis + '</p>'; // On récupère l'avis en bdd
+      block += '<p>' + retour[y].note + ' <i class="las la-star"></i></p>'; // On récupère l'avis en bdd
+      block += '<p class="right-align"> Posté par : <b>' + retour[y].prenom + '</b><p>'; // On récupère le prénom en bdd
+      block += '</div>';
+    }
+    RepCom.innerHTML = block; // Dans la div response on envoi les éléments de la boucle for
+  }
+
+  xhr2.open('GET','action.php',true); // Requête AJAX
+  xhr2.setRequestHeader('Content-Type', 'application/x-www-form-urlencoded');
+  xhr2.send('voirCom'); // voirCom est un élément HTML qu'on  créé, CF action.php
+
+}//Voir les commentaires de la page index
+

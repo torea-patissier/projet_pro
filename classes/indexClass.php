@@ -3,13 +3,16 @@ require_once('dbClass.php');
 class index extends bdd
 {
 
-    public function envoyerCommentaire($avisClient) // Envoi un commentaire en Bdd
+    public function envoyerCommentaire($avisClient, $noteClient) // Envoi un commentaire en Bdd
     {
 
         $con = $this->connectDb();
-        $date = date("Y-m-d");
         $id_client = $_SESSION['user']['id'];
-        $req = $con->prepare("INSERT INTO `avis`( `date`, `id_client`, `avis`) VALUES ('$date' , '$id_client' , '$avisClient' )");
+        $req = $con->prepare("INSERT INTO avis(id_client, avis, note) VALUES(:id_client, :avisClient, :noteClient)");
+        $req->bindValue("id_client", $id_client, PDO::PARAM_INT);
+        $req->bindValue("avisClient", $avisClient, PDO::PARAM_STR);
+        $req->bindValue("noteClient", $noteClient, PDO::PARAM_INT);
+
         $req->execute();
     }
 
@@ -21,7 +24,7 @@ class index extends bdd
         $req = $con->prepare("SELECT * FROM avis INNER JOIN utilisateurs ON avis.id_client = utilisateurs.id");
         $req->execute();
         $resultat = $req->fetchAll();
-        return json_encode($resultat); // Converti le resultat php en JSON pour l'afficher sur l'Index en Asynchrone
+        return $resultat;
     }
 
     public function voirDerniersArticles() // Voi les 3 derniers articles en Bdd
@@ -72,6 +75,13 @@ class index extends bdd
             }
         } else {
             echo 'Aucun résultat pour : ' . $q;
+        }
+    }
+
+    public function repondreAvis(){
+        if(isset($_GET["posterRep"]) && !empty($_GET["posterRep"])){
+            $idAvis = intval(htmlspecialchars($_GET["posterRep"]));
+
         }
     }
 }
