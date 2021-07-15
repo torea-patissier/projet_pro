@@ -62,8 +62,8 @@ class index extends bdd
                 if (!empty($q)) { ?>
 
 <div class="produitRecherche">
-    <a href="../boutique/produits.php?show=<?= $a['nom'] ?>"><br />
-        <img src="Images/<?= $a['nom'] ?>.jpg" width="100px" height="100px"><br />
+    <a href="../projet_pro/boutique/produits.php?show=<?= $a['id'] ?>"><br />
+        <img src="Images/<?= $a['image_nom'] ?>.jpg" width="100px" height="100px"><br />
         <?= $a['nom']; ?> <br />
         <?= $a['prix']; ?> € <br /></a>
 </div>

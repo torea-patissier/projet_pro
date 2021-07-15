@@ -3,7 +3,6 @@ session_start();
 require_once('../html_partials/header.php');
 include '../autoloader.php';
 $gestionUtilisateurs = new backOffice;
-
 $id_droits = $_SESSION['user']['id_droits'];
 if ($id_droits != 20260) {
     header('location:http://localhost:8888/projet_pro/404.php');

@@ -4,6 +4,9 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="author" content="Toréa Patissier">
+    <meta name="keywords" content="marika, coiffure, salon, barbier, calvi, salons, tondeuse, rasoir, ciseaux, activités">
+    <meta name="description" content="Le salon Marika à Calvi, est un salon de coiffure et barbier depuis 2000, expert dans son domaine, mais également depuis peu en teinture végétale. La qualité des préstations et services proposés, font de ce salon un endroit de référence.">
     <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
     <link rel="stylesheet" href="../css/materialize.min.css">
     <link rel="stylesheet" href="../css/style.css">
@@ -14,16 +17,14 @@
 <div class="hide-on-med-and-down">
     <header>
         <!-- Sidenav à mettre en navbar si écran mobile -->
-        <ul id="dropdown1" class="dropdown-content">
-            <li><a href="#!">Hommes</a></li>
-            <li class="divider"></li>
-            <li><a href="#!">Femmes</a></li>
-            <li class="divider"></li>
-            <li><a href="#!">Enfants</a></li>
-        </ul>
         <nav>
             <div class="nav-wrapper">
                 <ul class="right hide-on-med-and-down">
+                    <?php
+                    if(isset($_SESSION['panier']) && $_SESSION['panier'] != null){
+                        echo'<li><a href="../boutique/panier.php"><i class="material-icons">shopping_cart</i></a></li>';
+                    }
+                    ?>
                     <li><a href="../index.php">Accueil</a></li>
                     <li><a href="../boutique/produits.php">Boutique</a></li>
                     <?php
@@ -38,8 +39,7 @@
                         ?><li><a href="../users/connexion.php">Connexion</a></li> <?php
                     }
                     ?>
-                    <!-- Dropdown Trigger -->
-                    <li><a class="dropdown-trigger" href="#!" data-target="dropdown1">Galerie<i class="material-icons right">arrow_drop_down</i></a></li>
+                    <li><a class="" href="../index.php">Galerie</a></li>
                 </ul>
             </div>
         </nav>
@@ -48,8 +48,14 @@
 <div class="hide-on-large-only">
             <!-- Sidenav à mettre en navbar si écran mobile -->
             <ul id="slide-out" class="sidenav">
+            <?php
+                    if(isset($_SESSION['panier']) && $_SESSION['panier'] != null){
+                        echo'<li><a href="../boutique/panier.php"><i class="material-icons">shopping_cart</i>Panier</a></li>';
+                    }
+                    ?>
                 <li><a class="waves-effect" href="../index.php"><i class="material-icons">home</i>Accueil</a></li>
-                <li><a class="waves-effect" href="#"><i class="material-icons">star_outline</i>Boutique</a></li>
+                <li><a class="waves-effect" href="../boutique/produits.php"><i class="material-icons">star_outline</i>Boutique</a></li>
+                <li><a class="waves-effect" href="../index.php"><i class="material-icons">image</i>Galerie</a></li>                    
                 <?php
                     if(isset($_SESSION['user'])){
 
@@ -63,7 +69,6 @@
                         ?><li><a class="waves-effect" href="../users/connexion.php"><i class="material-icons">person</i>Connexion</a></li> <?php
                     }
                     ?>
-                <li><a class="waves-effect" href="#"><i class="material-icons">shopping_cart</i>Panier</a></li><br />                                
                 </ul>
             <a data-target="slide-out" class="sidenav-trigger"><i class="material-icons">menu</i></a>
 </div>

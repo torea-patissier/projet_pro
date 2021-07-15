@@ -627,7 +627,7 @@ class backOffice extends bdd {
 
             if ($_SESSION['user']['id'] == $_GET['id']) {
 
-                echo '<div class="container">Impossible de supprimer un compte qui est connecté'.'</div>';
+                echo '<div class="container center align red-text"><b>Impossible de supprimer un compte qui est connecté</b>'.'</div>';
             } else {
 
                 $id = $_GET['id'];
@@ -755,14 +755,17 @@ class backOffice extends bdd {
                 $reqTel->execute();
 
             }
-            if (!empty($_POST['id_droits'])) {
+
+            if(!empty($_POST['id_droits'])){
+                
                 $reqIdDroits = $con->prepare("UPDATE utilisateurs SET  id_droits = :newIdDroits WHERE id = :id ");
                 $reqIdDroits->bindValue('newIdDroits', $newId_droits, PDO::PARAM_INT);
                 $reqIdDroits->bindValue('id', $id, PDO::PARAM_INT);
                 $reqIdDroits->execute();
             }
-            header("Refresh: 0;url=http://localhost:8888/projet_pro/backoffice/clients.php");
+            
 
+            echo'<p class="center align red-text"><b>Information(s) modifié(s)</b></p><br/>';
         }
     }
 

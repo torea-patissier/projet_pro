@@ -4,13 +4,9 @@
 body {
   margin: 0;
   padding: 0;
-  /* GARDE LE FOOTER EN BAS DE PAGE */
-  position: relative;
-  padding-bottom: 250.22px;
-  /* PADDING BOTTOM == INSPECTER  LA TAILLE DU FOOTER (1000 x 250.22)  */
-  min-height: 100vh;
-  /* GARDE LE FOOTER EN BAS DE PAGE */
 }
+
+
 
 #btn_backoffice {
   margin-top: 3em;
@@ -24,9 +20,15 @@ body {
 .divProduits{
   display:flex;
   flex-direction:row;  
-  flex-wrap: wrap;
-
+  flex-wrap: wrap; 
+  justify-content: center;
 }
+
+.description{
+  margin:15px;
+}
+
+
 .coco{
   padding: 30px;
 }
@@ -35,7 +37,7 @@ body {
  
 
 /* Pour garder un footer en bas de page */
-/* body {
+body {
   display: flex;
   min-height: 100vh;
   flex-direction: column;
@@ -43,8 +45,9 @@ body {
 
 main {
   flex: 1 0 auto;
-} */
+}
 /* Pour garder un footer en bas de page */
+
 
 /* Liens Footer */
 .aFooter{
@@ -67,6 +70,7 @@ a{
 }
 
 /* I.N.D.E.X */
+
 /* H2 index */
 .h2Index{
   display: flex;
@@ -95,11 +99,18 @@ a{
   margin: 50px;
 }
 
-/* GARDE LE FOOTER EN BAS DE PAGE */
-footer{
-  position: absolute;
-  bottom: 0;
-  width: 100%;
+/* BOUTIQUE */
+.boutonPanier{
+  display: flex;
+  flex-direction: row;
 }
-/* GARDE LE FOOTER EN BAS DE PAGE */
+
+  /* GARDE LE FOOTER EN BAS DE PAGE */
+  /* footer{
+    position: absolute;
+    bottom: 0;
+    width: 100%;
+  } */
+  /* GARDE LE FOOTER EN BAS DE PAGE */
+
 
