@@ -7,6 +7,7 @@ M.AutoInit();
     // object (dans notre cas ce sera {} donc la $ qui contient l'id du produit)
     // fonction à utiliser
     // Format, dans notre cas JSON)
+    
     $.get($(this).attr('href'),{},function(data){
 
       if(data.error){ //C.F error dans addpanier.php

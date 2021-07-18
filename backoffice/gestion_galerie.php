@@ -20,10 +20,15 @@ if ($id_droits != 20260) {
         header('location:http://localhost:8888/projet_pro/backoffice/gestion_galerie.php?page=1');
     }
 
-    $gestionGalerie->deletePhoto();
-
+    
     if (isset($_GET['deleteGCategory']) and !empty($_GET['deleteGCategory'])) {
         $gestionGalerie->deleteGCategory();
+    }
+    
+    if(isset($_GET['delete'])){
+
+        $gestionGalerie->deletePhoto();
+
     }
 
 ?>
@@ -80,17 +85,3 @@ if ($id_droits != 20260) {
 </main>
 
 <?php require_once('../html_partials/footer.php'); ?>
-
-<!--<div class="col s12 m12 l12">-->
-<!--    <div class="carouselExtensions">-->
-<!--        <p>Photos Extensions</p>-->
-<!--        <div class="carousel">-->
-<!--            --><?php //$gestionGalerie->carouselPhotosExtensions(); ?>
-<!--        </div>-->
-<!--    </div>-->
-<!--</div>-->
-<!--<div class="col s12 m12 l12">-->
-<!--    <div class="carousel">-->
-<!--        --><?php //$gestionGalerie->carouselPhotosEnfant(); ?>
-<!--    </div>-->
-<!--</div>-->

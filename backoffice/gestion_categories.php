@@ -11,10 +11,13 @@ if ($id_droits != 20260) {
  }
 
 if (isset($_POST["valider"])) {
+
     if (!empty($_POST["newCategorie"])) {
+
         $gestionCategories->AjouterCategorieBdd();
         header('location:http://localhost:8888/projet_pro/backoffice/gestion_categories.php');
     }
+    
     if (!empty($_POST["newSCategorie"])) {
         $gestionCategories->AjouterSCategorieBdd();
         header('location:http://localhost:8888/projet_pro/backoffice/gestion_categories.php');

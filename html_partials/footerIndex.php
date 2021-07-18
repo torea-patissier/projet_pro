@@ -5,8 +5,10 @@
                 <h5 class="white-text center-align">Marika coiffure</h5>
                 <li class="divider"></li>
                 <ul>
-                <li class="col s6 l6"><a class="grey-text text-lighten-3" href="https://www.instagram.com/marika.coiffure/"><img src="images/instagram.png"></a></li>
-                <li class="col s6 l6"><a class="grey-text text-lighten-3" href="https://www.facebook.com/MarikaCoiffureCalvi"><img src="images/facebook.png"></a></li>
+                    <div class="center-align">
+                        <li class="col s6 l6"><a class="grey-text text-lighten-3" href="https://www.instagram.com/marika.coiffure/"><img src="images/instagram.png"></a></li>
+                        <li class="col s6 l6"><a class="grey-text text-lighten-3" href="https://www.facebook.com/MarikaCoiffureCalvi"><img src="images/facebook.png"></a></li>
+                    </div>
                 </ul>
             </div>
 

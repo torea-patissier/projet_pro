@@ -25,29 +25,12 @@ body {
 }
 
 .description{
-  margin:15px;
+  margin:5px;
 }
-
 
 .coco{
   padding: 30px;
 }
-
-
- 
-
-/* Pour garder un footer en bas de page */
-body {
-  display: flex;
-  min-height: 100vh;
-  flex-direction: column;
-}
-
-main {
-  flex: 1 0 auto;
-}
-/* Pour garder un footer en bas de page */
-
 
 /* Liens Footer */
 .aFooter{
@@ -56,12 +39,15 @@ main {
 
 /* Navbar & Footer */
 nav, .page-footer{
-  background-color: #88A97A;
+  background-color: black;
 }
+
+
 
 a{
   color: black;
 }
+
 
 /* 404 */
 .main404{
@@ -99,18 +85,26 @@ a{
   margin: 50px;
 }
 
+
 /* BOUTIQUE */
 .boutonPanier{
   display: flex;
   flex-direction: row;
 }
 
+/* PANIER */
+#boxPanier{
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
+}
+
   /* GARDE LE FOOTER EN BAS DE PAGE */
-  /* footer{
+  footer{
     position: absolute;
     bottom: 0;
     width: 100%;
-  } */
+  }
   /* GARDE LE FOOTER EN BAS DE PAGE */
 
 

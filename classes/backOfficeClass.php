@@ -460,16 +460,15 @@ class backOffice extends bdd {
 
 
     function deletePhoto(){
-        $con = $this->connectDb();
 
+        $con = $this->connectDb();
         // Supprimer un article de la Bdd
-        if(isset($_GET['action'])&&($_GET['action']== 'delete')){
-            $id = htmlspecialchars($_GET['id']);
-            $req = $con->prepare("DELETE FROM images_galerie WHERE id = :id ");
+            $id = htmlspecialchars($_GET['delete']);
+            $req = $con->prepare("DELETE FROM images_galerie WHERE id_photo = :id ");
             $req->bindValue("id", $id, PDO::PARAM_INT);
             $req->execute();
             header('location:http://localhost:8888/projet_pro/backoffice/gestion_galerie.php?page=1');
-        }
+        
     }
                   //    !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
     public function paginationGalerie()
@@ -484,7 +483,7 @@ class backOffice extends bdd {
 
         $limite = 5;
 
-        $resultFoundRows = $con->query("SELECT count(id) FROM images_galerie");
+        $resultFoundRows = $con->query("SELECT count(id_photo) FROM images_galerie");
         $nombreElementsTotal = $resultFoundRows->fetchColumn();
         $debut = ($page - 1) * $limite;
         // Partie "Requête"
@@ -510,7 +509,7 @@ class backOffice extends bdd {
             echo "<tr>";
             echo "<td><img src='../Images_Galerie/" . $r->enc_name . ".jpg' width='100px' height='100px'/></td>";
             echo "<td>" . $r->categorie . "</td>";
-            echo "<td><a href='?action=delete&amp;id=" . $r->id . "'>Supprimer</a></td>";
+            echo "<td><a href='?delete=" . $r->id_photo . "'>Supprimer</a></td>";
             echo "</tr>";
         }
         echo "</tbody></table></div>";
@@ -678,7 +677,6 @@ class backOffice extends bdd {
             $tel = $result["tel"];
             $id_droits = $result["id_droits"];
         }
-//        var_dump($resultats);
         ?>
 
 
@@ -727,13 +725,16 @@ class backOffice extends bdd {
             $newEmail = trim(htmlspecialchars($_POST['email']));
             $newTel = trim(htmlspecialchars($_POST['tel']));
             $newId_droits = trim(htmlspecialchars($_POST['id_droits']));
+            
 
             if (!empty($_POST['pre'])) {
                 $reqPrenom = $con->prepare("UPDATE utilisateurs SET prenom = :newPrenom WHERE id = :id ");
                 $reqPrenom->bindValue('newPrenom', $newPre, PDO::PARAM_STR);
                 $reqPrenom->bindValue('id', $id, PDO::PARAM_INT);
                 $reqPrenom->execute();
+
             }
+
             if (!empty($_POST['nom'])) {
                 $reqNom = $con->prepare("UPDATE utilisateurs SET nom = :newNom WHERE id = :id ");
                 $reqNom->bindValue('newNom', $newNom, PDO::PARAM_STR);
@@ -762,11 +763,15 @@ class backOffice extends bdd {
                 $reqIdDroits->bindValue('newIdDroits', $newId_droits, PDO::PARAM_INT);
                 $reqIdDroits->bindValue('id', $id, PDO::PARAM_INT);
                 $reqIdDroits->execute();
-            }
-            
+            }?>
 
-            echo'<p class="center align red-text"><b>Information(s) modifié(s)</b></p><br/>';
+    <script>
+    function RedirectionJavascript(){
+      document.location.href="../backoffice/clients.php"; 
+    }
+    RedirectionJavascript()
+    </script>
+    <?php        
         }
     }
-
 }

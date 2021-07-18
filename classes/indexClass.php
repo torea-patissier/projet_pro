@@ -47,11 +47,11 @@ class index extends bdd
         if (isset($_GET['q']) && !empty($_GET['q'])) {
 
             $q = htmlspecialchars($_GET['q']);
-            $articles = $con->query('SELECT * FROM produits WHERE nom LIKE "%' . $q . '%" ORDER BY id DESC LIMIT 4');
+            $articles = $con->query('SELECT * FROM produits WHERE nom LIKE "%' . $q . '%" ORDER BY id DESC LIMIT 3');
 
             if ($articles->rowCount() == 0) {
 
-                $articles = $con->query('SELECT * FROM produits WHERE CONCAT(nom, description) LIKE "%' . $q . '%" ORDER BY id DESC LIMIT 4');
+                $articles = $con->query('SELECT * FROM produits WHERE CONCAT(nom, description) LIKE "%' . $q . '%" ORDER BY id DESC LIMIT 3');
             }
         }
 
@@ -63,9 +63,9 @@ class index extends bdd
 
 <div class="produitRecherche">
     <a href="../projet_pro/boutique/produits.php?show=<?= $a['id'] ?>"><br />
-        <img src="Images/<?= $a['image_nom'] ?>.jpg" width="100px" height="100px"><br />
-        <?= $a['nom']; ?> <br />
-        <?= $a['prix']; ?> € <br /></a>
+    <b><?= $a['nom']; ?> </b><br />
+    <img src="Images/<?= $a['image_nom'] ?>.jpg" width="100px" height="100px"><br />
+        <b><?= $a['prix']; ?> € </b><br /></a>
 </div>
 <?php
                 }

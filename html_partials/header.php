@@ -49,7 +49,7 @@
             <!-- Sidenav à mettre en navbar si écran mobile -->
             <ul id="slide-out" class="sidenav">
             <?php
-                    if(isset($_SESSION['panier']) && $_SESSION['panier'] != null){
+                    if(($_SESSION['panier']) && $_SESSION['panier'] != null){
                         echo'<li><a href="../boutique/panier.php"><i class="material-icons">shopping_cart</i>Panier</a></li>';
                     }
                     ?>
