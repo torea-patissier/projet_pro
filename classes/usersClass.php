@@ -145,7 +145,7 @@ class users extends bdd
 
                 if($testpwd < 4){
 
-                    echo '<br />' . '<p class="erreur_inscription center-align red-text"><b>Rappel : Votre mot de passe doit contenir au minimum 7 caractères, incluant une Majuscule, un chifre et un caractère spécial.</b></p>';
+                    echo '<br />' . '<p class="erreur_inscription center-align red-text"><b>Rappel : Votre mot de passe doit contenir une majuscule, minuscule un chiffre et un caractère spécial.</b></p>';
                 }else { // Si oui on créer le compte en Db
 
                     if ($mdp != $conf) {

@@ -21,7 +21,7 @@
             <div class="col l3 m6 s12">
                 <h5 class="white-text center-align">Liens</h5>
                 <li class="divider"></li>
-                <p class="center-align"><a class="aFooter" href="../mentions/mentions.php">Mentions légale</a></p>
+                <p class="center-align"><a class="aFooter" href="../mentions/mentions.php">Mentions légales</a></p>
             </div>
 
             <div class="col l3 m6 s12">

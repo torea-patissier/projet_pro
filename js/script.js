@@ -75,18 +75,20 @@ document.getElementById("formIndex").addEventListener("submit", function (e) {
 
   e.preventDefault(); // Evite le rechargement de la page
   var avisClient = document.getElementById("avis").value; // On récupère l'id du formulaire avis client
+  var noteClient = document.getElementById("note").value; // On récupère la valeur de la note
   var xhr = new XMLHttpRequest(); // Instancier obj XHR
 
   xhr.onload = function () {
     afficherCommentaire(); // Une fois le commentaire envoyé, on va l'afficher  avec la F afficherCom
-    avisClient.innerHTML = "";
   };
 
   xhr.open("POST", "action.php", true); // Requête ajax
   xhr.setRequestHeader("Content-Type", "application/x-www-form-urlencoded");
-  xhr.send("newCom=" + avisClient); // CF l6 action.php
+  xhr.send("newCom=" + avisClient + '&note=' + noteClient); // CF l6 action.php
+  document.forms['formIndex'].reset(); // Vide l'input du formulaire index lors de l'envoi du commentaire
 });
-//Envoyer un commentaire depuis la page index
+// ENVOYER UN COMMENTAIRE DEPUIS LA PAGE INDEX
+
 
 // AFFICHER LES COMMENTAIRES DE LA PAGE INDEX
 function afficherCommentaire() {
@@ -104,8 +106,8 @@ function afficherCommentaire() {
       // Equiv foreach Php
       block += '<div class="avisClient">';
       block += "<p>" + retour[y].avis + "</p>"; // On récupère l'avis en bdd
-      block +=
-        '<p class="right-align"> Posté par : ' + retour[y].prenom + "<p>"; // On récupère le prénom en bdd
+      block += '<p>' + retour[y].note + ' <i class="las la-star"></i></p>'; // On récupère l'avis en bdd
+      block += '<p class="right-align"> Posté par : ' + retour[y].prenom + "<p>"; // On récupère le prénom en bdd
       block += "</div>";
     }
     RepCom.innerHTML = block; // Dans la div response on envoi les éléments de la boucle for

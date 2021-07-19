@@ -6,11 +6,11 @@ $pageAction = new index();
 // POSTER UN COMMENTAIRE
 if (isset($_POST['newCom'])) { // CF JS #avis est devenu var commentaire donc indirectement $_POST['commentaire'];
 
-    $avisClient = htmlspecialchars(trim(addslashes($_POST['newCom']))); // Idem
-    $pageAction->envoyerCommentaire($avisClient);
+    $avisClient = htmlspecialchars(trim($_POST['newCom'])); // Idem
+    $noteClient = htmlspecialchars(intval($_POST["note"]));
+    echo $pageAction->envoyerCommentaire($avisClient, $noteClient);
 }
 // POSTER UN COMMENTAIRE
-
 
 // VOIR COMMENTAIRE QUAND ON EN POSTE UN
 if(isset($_GET['voirCom'])){  // CF JS fonction afficherCommentaire sen('voirCom')

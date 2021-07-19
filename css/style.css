@@ -6,8 +6,6 @@ body {
   padding: 0;
 }
 
-
-
 #btn_backoffice {
   margin-top: 3em;
 }
@@ -57,6 +55,33 @@ a{
 
 /* I.N.D.E.X */
 
+/* NOUVEAUX ARTICLES */
+
+@media screen and (min-width:768px){
+  .newArticles{
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+  }
+}
+
+@media screen and (max-width:425px){
+  .newArticles{
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+  }
+
+}
+
+.article{
+  background-color: rgba(200, 200, 200, 0.185);
+  padding: 5px;
+  margin: 5px;
+  border-radius: 0.3rem;
+
+}
+
 /* H2 index */
 .h2Index{
   display: flex;
@@ -99,12 +124,12 @@ a{
   justify-content: space-between;
 }
 
-  /* GARDE LE FOOTER EN BAS DE PAGE */
+  /* GARDE LE FOOTER EN BAS DE PAGE
   footer{
     position: absolute;
     bottom: 0;
     width: 100%;
-  }
+  } */
   /* GARDE LE FOOTER EN BAS DE PAGE */
 
 

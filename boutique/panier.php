@@ -69,15 +69,26 @@ $panier = new panier();
                 <input class="btn black col s12 m6 l4" type="submit" value="Modifier panier"><br /><br />
                 <input class="btn black col s12 m6 l4 left-align" name="supprimerTout" type="submit" value="Tout supprimer">
             </div>
-        </div><br/>
+        </div><br />
     <?php
     } else {
         echo '<h1 class="center-align">Votre panier est vide </h1>';
     }
+    ?>
+
+</form>
+
+<?php
+if (isset($_SESSION['user']['id'])) {
 
     require_once('../paypal/paypal.php');
-    ?>
-</form>
+
+} else {
+
+    echo '<p class="center-align green-text"><b>Vous devez être connecté pour pouvoir payer.</b></p><br/>';
+    
+}
+?>
 <?php
 require_once('../html_partials/footer.php');
 ?>

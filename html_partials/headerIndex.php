@@ -8,7 +8,9 @@
     <meta name="keywords" content="marika, coiffure, salon, barbier, calvi, salons, tondeuse, rasoir, ciseaux, activités">
     <meta name="description" content="Le salon Marika à Calvi, est un salon de coiffure et barbier depuis 2000, expert dans son domaine, mais également depuis peu en teinture végétale. La qualité des préstations et services proposés, font de ce salon un endroit de référence.">
     <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
+    <link rel="stylesheet" href="https://maxst.icons8.com/vue-static/landings/line-awesome/line-awesome/1.3.0/css/line-awesome.min.css">
     <link rel="stylesheet" href="css/materialize.min.css">
+    <link rel="stylesheet" type="text/css" href="../css/lightbox.css">
     <link rel="stylesheet" href="css/style.css">
     <title>Marika coiffure</title>
 </head>
@@ -29,6 +31,8 @@
                     ?>                
                     <li><a href="index.php">Accueil</a></li>
                     <li><a href="boutique/produits.php">Boutique</a></li>
+                    <!-- Dropdown Trigger -->
+                    <li><a class="waves-effect" href="galerie/galerie_homme.php">Galerie</a></li>
                     <?php
                     if(isset($_SESSION['user'])){
                         
@@ -41,8 +45,6 @@
                         ?><li><a href="users/connexion.php">Connexion</a></li> <?php
                     }
                     ?>
-                    <!-- Dropdown Trigger -->
-                    <li><a class="waves-effect" href="index.php">Galerie</a></li>
                 </ul>
             </div>
         </nav>
@@ -58,7 +60,7 @@
                     ?>
                 <li><a class="waves-effect" href="index.php"><i class="material-icons">home</i>Accueil</a></li>
                 <li><a class="waves-effect" href="boutique/produits.php"><i class="material-icons">star_outline</i>Boutique</a></li>
-                <li><a class="waves-effect" href="index.php"><i class="material-icons">image</i>Galerie</a></li>
+                <li><a class="waves-effect" href="galerie/galerie_homme.php"><i class="material-icons">image</i>Galerie</a></li>
                 <?php
                     if(isset($_SESSION['user'])){
 

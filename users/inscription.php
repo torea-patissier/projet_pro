@@ -14,6 +14,7 @@ if (isset($_POST["inscription"])) {
     <form action="" method="POST">
         <div class="container">
             <h1 class="center-align">Inscription</h1><br/><br/>
+            <p class="center-align"><b>Votre mot de passe doit contenir une minuscule, majuscule un chiffre ainsi qu'un caractère spécial (&%§)</b></p>
             <div class="row">
                 <div class="col s12 m6 l6">
                     <label>Nom</label><br /><br />
@@ -29,7 +30,7 @@ if (isset($_POST["inscription"])) {
                     <input type="tel" name="iTel" id="iTel" value="<?php if($_POST)echo $_POST['iTel'];?>" required><br /><br />
                     <label>Mot de passe</label><br /><br />
                     <input type="password" name="iPassword" id="iPassword" value="<?php if($_POST)echo $_POST['iPassword'];?>" required><br /><br />
-                    <label>Confirmation de passe</label><br /><br />
+                    <label>Confirmation mot de passe</label><br /><br />
                     <input type="password" name="iConfPassword" id="iConfPassword" value="<?php if($_POST)echo $_POST['iConfPassword'];?>" required><br /><br />
                     
                 </div>

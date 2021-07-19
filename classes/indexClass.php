@@ -3,13 +3,45 @@ require_once('dbClass.php');
 class index extends bdd
 {
 
-    public function envoyerCommentaire($avisClient) // Envoi un commentaire en Bdd
+    //Montrer au client les derniers articles ajoutés en Bdd (nouveautés)
+    public function newArticles()
     {
 
         $con = $this->connectDb();
-        $date = date("Y-m-d");
+        $request = $con->prepare("SELECT * FROM produits ORDER BY id DESC LIMIT 0,3");
+        $request->execute();
+?>
+        <div class="newArticles">
+            <?php
+            while ($r = $request->fetch(PDO::FETCH_OBJ)) {
+            ?>
+                <div class="article">
+
+                    <a href="../projet_pro/boutique/produits.php?show=<?= $r->id; ?>"><br />
+                        <img src="Images/<?= $r->image_nom; ?>.jpg" alt="shampoing" height="200px" /><br />
+                        <p><b><?php echo $r->nom; ?></b></p>
+                        <p><b><?php echo $r->prix; ?>€</b></p>
+                    </a>
+
+                </div>
+
+            <?php
+            } ?>
+
+        </div><br /><br />
+    <?php
+    }
+
+    public function envoyerCommentaire($avisClient, $noteClient) // Envoi un commentaire en Bdd
+    {
+
+        $con = $this->connectDb();
         $id_client = $_SESSION['user']['id'];
-        $req = $con->prepare("INSERT INTO `avis`( `date`, `id_client`, `avis`) VALUES ('$date' , '$id_client' , '$avisClient' )");
+        $req = $con->prepare("INSERT INTO avis(id_client, avis, note) VALUES(:id_client, :avisClient, :noteClient)");
+        $req->bindValue("id_client", $id_client, PDO::PARAM_INT);
+        $req->bindValue("avisClient", $avisClient, PDO::PARAM_STR);
+        $req->bindValue("noteClient", $noteClient, PDO::PARAM_INT);
+
         $req->execute();
     }
 
@@ -34,13 +66,13 @@ class index extends bdd
     public function recherche() // Barre de recherche 
     {
 
-?>
-<form method="GET">
-    <input type="search" name="q" placeholder="Recherche..." />
-    <input class="btn black" type="submit" value="Valider" /><br />
-</form><br />
+    ?>
+        <form method="GET">
+            <input type="search" name="q" placeholder="Recherche..." />
+            <input class="btn black" type="submit" value="Valider" /><br />
+        </form><br />
 
-<?php
+        <?php
         $con = $this->connectDb();
         $articles = $con->query('SELECT * FROM produits ORDER BY id DESC');
 
@@ -61,12 +93,12 @@ class index extends bdd
 
                 if (!empty($q)) { ?>
 
-<div class="produitRecherche">
-    <a href="../projet_pro/boutique/produits.php?show=<?= $a['id'] ?>"><br />
-    <b><?= $a['nom']; ?> </b><br />
-    <img src="Images/<?= $a['image_nom'] ?>.jpg" width="100px" height="100px"><br />
-        <b><?= $a['prix']; ?> € </b><br /></a>
-</div>
+                    <div class="produitRecherche">
+                        <a href="../projet_pro/boutique/produits.php?show=<?= $a['id'] ?>"><br />
+                            <b><?= $a['nom']; ?> </b><br />
+                            <img src="Images/<?= $a['image_nom'] ?>.jpg" width="100px" height="100px"><br />
+                            <b><?= $a['prix']; ?> € </b><br /></a>
+                    </div>
 <?php
                 }
             }

@@ -14,10 +14,6 @@ $pageIndex = new index();
     <div class="divIndex0">
 
         <h1 class="center-align txtIndex">Marika</h1><br />
-        <!-- <div class="container h2Index">
-            <h2 class="left-align txtIndex">Coiffure</h2>
-            <h2 class="right-align txtIndex">Barbier</h2>
-        </div> -->
 
     </div>
     <!-- Div N0 -->
@@ -41,10 +37,12 @@ $pageIndex = new index();
 
     <div class="divIndex1a">
         <div class="container">
-            <div class="row">
-                <h2 class="txtIndex left-align">Les nouveautés</h2>
 
-            </div>
+            <h2 class="txtIndex left-align">Les nouveautés</h2>
+            <?php
+            $pageIndex->newArticles();
+            ?>
+
         </div>
     </div>
 
@@ -66,16 +64,21 @@ $pageIndex = new index();
                 ?>
 
                     <form id="formIndex" method="" action="">
-                        <input type="text" id="avis" name="avis">
+                        <input type="text" id="avis" name="avis" placeholder="Rédigez votre avis ici..">
                         <input class="btn black" type="submit" id="envoyerCommentaire" name="envoyerCommentaire">
                     </form>
+                    <div class="stars">
+                        <i class="lar la-star" data-value="1"></i><i class="lar la-star" data-value="2"></i><i class="lar la-star" data-value="3"></i><i class="lar la-star" data-value="4"></i><i class="lar la-star" data-value="5"></i>
+                    </div>
+                    <input hidden id="note" type="text" name="note" value="0">
 
-                    <div id="response"></div>
+
 
                 <?php
                 } else { // Sinon je dois me connecter pour pouvoir le faire
-                    echo '<br/> Veuillez vous connecter pour poster un commentaire';
+                    echo '<br/><p class="center-align"><b> Veuillez vous connecter pour poster un commentaire </b></p>';
                 } ?>
+                <div id="response"></div>
             </div>
         </div>
     </div><br />
