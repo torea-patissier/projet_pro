@@ -20,7 +20,9 @@ if ($id_droits != 20260) {
         header('location:http://localhost/projet_pro/backoffice/gestion_galerie?page=1.php');
     }
 
-    $gestionGalerie->deletePhoto();
+    if (isset($_GET['deletePGalery']) and !empty($_GET['deletePGalery'])) {
+        $gestionGalerie->deletePhoto();
+    }
 
     if (isset($_GET['deleteGCategory']) and !empty($_GET['deleteGCategory'])) {
         $gestionGalerie->deleteGCategory();

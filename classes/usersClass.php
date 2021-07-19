@@ -35,7 +35,7 @@ class users extends bdd
                 return false;
                 // Vérifier si les MDP sont les mêmes
             } elseif ($testpwd < 4) {
-                echo '<br />' . '<b><p class="container center-align red-text"><b>Rappel : Votre mot de passe doit contenir au minimum 7 caractères, incluant une majuscule, un chiffre et un caractère spécial.</p></b></b>';
+                echo '<br />' . '<b><p class="container center-align red-text"><b>Rappel : Votre mot de passe doit contenir une minuscule, une majuscule, un chiffre et un caractère spécial.</p></b></b>';
                 return false;
             } elseif ([$password] != [$confpassword]) {
                 echo '<br />' . '<b><p class="container center-align red-text">Les mots de passe ne correspondent pas.</p></b>';
@@ -45,7 +45,14 @@ class users extends bdd
                 $infoUser = $con->prepare("INSERT INTO `utilisateurs`
                         (`nom`, `prenom`, `email`, `password`, `id_droits`, `tel`) 
                         VALUES
-                        ('$nom','$prenom','$email','$hash','$chiffre','$tel')");
+                        (:nom, :prenom, :email, :password, :droit, :tel)");
+                $infoUser->bindValue("nom", $nom, PDO::PARAM_STR);
+                $infoUser->bindValue("prenom", $prenom, PDO::PARAM_STR);
+                $infoUser->bindValue("email", $email, PDO::PARAM_STR);
+                $infoUser->bindValue("password", $hash, PDO::PARAM_STR);
+                $infoUser->bindValue("droit", $chiffre, PDO::PARAM_INT);
+                $infoUser->bindValue("tel", $tel, PDO::PARAM_STR);
+
                 $infoUser->execute();
 
                 header("location:http://localhost/projet_pro/users/connexion.php");

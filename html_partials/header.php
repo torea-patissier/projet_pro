@@ -15,43 +15,79 @@
 
 <body>
 <header>
-    <!-- Sidenav à mettre en navbar si écran mobile -->
-    <ul id="dropdown1" class="dropdown-content">
-        <li><a href="../galerie/galerie_hommes.php">Hommes</a></li>
-        <li class="divider"></li>
-        <li><a href="../galerie/galerie_femmes.php">Femmes</a></li>
-        <li class="divider"></li>
-        <li><a href="../galerie/galerie_enfants.php">Enfants</a></li>
-    </ul>
-    <nav>
-        <div class="nav-wrapper">
-            <a href="#!" class="brand-logo">Logo</a>
-            <ul class="right hide-on-med-and-down">
 
-                <li><a href="../index.php">Accueil</a></li>
+        <nav class="headerN">
+            <div class="nav-wrapper">
+                <div class="hide-on-small-only">
+                    <a href="../index.php" class="brand-logo-header">Marika Coiffure</a>
+                </div>
+                <div class="hide-on-small-only">
 
-                <li><a href="#">Boutique</a></li>
+                <ul class="ulHeader right">
+                    <?php
+                    if(isset($_SESSION['panier']) && $_SESSION['panier'] != null){
+                        echo'<li><a href="boutique/panier.php"><i class="material-icons">shopping_cart</i></a></li>';
+                    }
+                    ?>
+                        <li><a class="headerG" href="../index.php">Accueil</a></li>
 
-                <?php
+                        <li><a class="headerG" href="../boutique/produits.php">Boutique</a></li>
 
-                if(isset($_SESSION['user'])){
+                        <?php
 
-                    ?><li><a href="../users/profil.php">Profil</a></li> <?php
+                        if(isset($_SESSION['user'])){
 
-                }else{
+                            ?><li><a class="headerG" href="../users/profil.php">Profil</a></li> <?php
 
-                    ?><li><a href="../users/connexion.php">Connexion</a></li> <?php
-                }
+                        }else{
 
-                if(isset($_SESSION["user"]) && $_SESSION['user']['id_droits'] == 20260){
+                            ?><li><a class="headerG" href="../users/connexion.php">Connexion</a></li> <?php
+                        }
 
-                    ?> <li><a href="../backoffice/backoffice.php">Admin</a></li> <?php
-                }
+                        if(isset($_SESSION["user"]) && $_SESSION['user']['id_droits'] == 20260){
 
-                ?>
-                <!-- Dropdown Trigger -->
-                <li><a class="dropdown-trigger" href="#!" data-target="dropdown1">Galerie<i class="material-icons right">arrow_drop_down</i></a></li>
-            </ul>
-        </div>
-    </nav>
+                            ?> <li><a class="headerG" href="../backoffice/backoffice.php">Admin</a></li> <?php
+                        }
+
+                        ?>
+                        <!-- Dropdown Trigger -->
+                        <li><a class="headerG" href="../galerie/galerie_hommes.php" data-target="dropdown1">Galerie</a></li>
+                    </ul>
+                </div>
+                <div class="hide-on-med-and-up">
+                    <ul class="right">
+                        <?php
+                        if(isset($_SESSION['panier']) && $_SESSION['panier'] != null){
+                            echo'<li><a href="../boutique/panier.php"><i class="material-icons">shopping_cart</i></a></li>';
+                        }
+                        ?>
+                        <li><a class="headerG" href="../index.php">Accueil</a></li>
+
+                        <li><a class="headerG" href="../boutique/produits.php">Boutique</a></li>
+
+                        <?php
+
+                        if(isset($_SESSION['user'])){
+
+                            ?><li><a class="headerG" href="../users/profil.php">Profil</a></li> <?php
+
+                        }else{
+
+                            ?><li><a class="headerG" href="../users/connexion.php">Connexion</a></li> <?php
+                        }
+
+                        if(isset($_SESSION["user"]) && $_SESSION['user']['id_droits'] == 20260){
+
+                            ?> <li><a class="headerG" href="../backoffice/backoffice.php">Admin</a></li> <?php
+                        }
+
+                        ?>
+                        <!-- Dropdown Trigger -->
+                        <li><a class="headerG" href="../galerie/galerie_hommes.php" data-target="dropdown1">Galerie</a></li>
+                    </ul>
+                </div>
+            </div>
+        </nav>
+
+
 </header>

@@ -203,7 +203,8 @@ class backOffice extends bdd {
 
             $s = $request->fetch(PDO::FETCH_OBJ);  // Résultat stocké dans la $S
 
-            ?> 
+            ?>
+            <div class="decalerModifProd">
             <br /><br /><br />
                 <div class="container">
                     <div class="center-align">
@@ -233,6 +234,7 @@ class backOffice extends bdd {
 
                 <input class="btn black center-align" type="submit" name="envoyer" value="Modifier"><br/><br />
             </form>
+            </div>
             </div>
             </div>
 
@@ -297,7 +299,7 @@ class backOffice extends bdd {
         $req->execute();
         $result = $req->fetchAll();
 
-        echo "<h2> Sous Catégories : </h2>";
+        echo "<h2> Gammes : </h2>";
         foreach ($result as $resultat) {
             echo $resultat["sous_categorie"] . ' ' . ' <a class="href_admin" href="gestion_categories.php?deletesc=' . $resultat['id'] . '">' . ' <b>Supprimer</b>' . '</a>' . "<br />";
         }
@@ -381,16 +383,7 @@ class backOffice extends bdd {
         }
     }
 
-    public function deleteGCategory(){
 
-            $con = $this->connectDb();
-            $id = htmlspecialchars($_GET['deleteGCategory']);
-            $supp = $con->prepare("DELETE FROM categories_galerie WHERE id = :id ");
-            $supp->bindValue('id', $id, PDO::PARAM_INT);
-            $supp->execute();
-            header('location:http://localhost/projet_pro/backoffice/gestion_galerie?page=1.php');
-
-    }
 
     public function newPhoto(){
 
@@ -458,18 +451,25 @@ class backOffice extends bdd {
             $request->execute();
     }
 
+    public function deleteGCategory(){
+
+        $con = $this->connectDb();
+        $id = htmlspecialchars($_GET['deleteGCategory']);
+        $supp = $con->prepare("DELETE FROM categories_galerie WHERE id = :id ");
+        $supp->bindValue('id', $id, PDO::PARAM_INT);
+        $supp->execute();
+        header('location:http://localhost/projet_pro/backoffice/gestion_galerie?page=1.php');
+
+    }
 
     function deletePhoto(){
         $con = $this->connectDb();
-
-        // Supprimer un article de la Bdd
-        if(isset($_GET['action'])&&($_GET['action']== 'delete')){
-            $id = htmlspecialchars($_GET['id']);
-            $req = $con->prepare("DELETE FROM images_galerie WHERE id = :id ");
+        // Supprimer une photo de la galerie
+            $id = htmlspecialchars($_GET['deletePGalery']);
+            $req = $con->prepare("DELETE FROM images_galerie WHERE id_photo = :id ");
             $req->bindValue("id", $id, PDO::PARAM_INT);
             $req->execute();
             header('location:http://localhost/projet_pro/backoffice/gestion_galerie?page=1.php');
-        }
     }
                   //    !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
     public function paginationGalerie()
@@ -484,7 +484,7 @@ class backOffice extends bdd {
 
         $limite = 5;
 
-        $resultFoundRows = $con->query("SELECT count(id) FROM images_galerie");
+        $resultFoundRows = $con->query("SELECT count(id_photo) FROM images_galerie");
         $nombreElementsTotal = $resultFoundRows->fetchColumn();
         $debut = ($page - 1) * $limite;
         // Partie "Requête"
@@ -510,7 +510,7 @@ class backOffice extends bdd {
             echo "<tr>";
             echo "<td><img src='../Images_Galerie/" . $r->enc_name . ".jpg' width='100px' height='100px'/></td>";
             echo "<td>" . $r->categorie . "</td>";
-            echo "<td><a href='?action=delete&amp;id=" . $r->id . "'>Supprimer</a></td>";
+            echo "<td><a href='gestion_galerie.php?deletePGalery=" . $r->id_photo . "'>Supprimer</a></td>";
             echo "</tr>";
         }
         echo "</tbody></table></div>";

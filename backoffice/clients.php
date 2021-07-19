@@ -46,7 +46,7 @@ if (isset($_GET['userModif'])) {
                 <div class="left-align">
                     <p>Droits : <br />
                     1 = Utilisateur<br />
-                    2 = Administrateur</p>
+                    20260 = Administrateur</p>
                 </div>
         </div>
     </div>

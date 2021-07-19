@@ -1,5 +1,7 @@
 @import url("https://fonts.googleapis.com/css2?family=Montserrat&display=swap");
 @import url('https://fonts.googleapis.com/css2?family=Dancing+Script:wght@700&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Parisienne&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Montserrat&display=swap');
 
 * {
   font-family: "Montserrat", sans-serif;
@@ -43,17 +45,26 @@ aRed{
 
 /* Navbar & Footer */
 nav, .page-footer{
-  background-color: #88A97A;
+  -webkit-box-shadow: 0px 3px 3px 0px rgba(50, 50, 50, 0.75);
+  -moz-box-shadow:    0px 3px 3px 0px rgba(50, 50, 50, 0.75);
+  box-shadow:         0px 3px 3px 0px rgba(50, 50, 50, 0.75);
+  background-color: transparent;
+  text-shadow: 1px 1px 1px black;
 }
 
 a{
   color: black;
 }
 
+
+
 /* 404 */
 .main404{
   background-image: url(../images/image404.jpg);
   color: #ffff;
+  margin-top: -70px;
+  background-size: auto;
+  background-repeat: no-repeat;
 }
 
 /* I.N.D.E.X */
@@ -62,18 +73,9 @@ a{
   display: flex;
   justify-content: space-between;
 }
-/* Police Index */
-.txtIndex{
-  font-family: 'Dancing Script', cursive;
-}
 /* Couleur de la div0 */
-.divIndex0{
-  background-color: #88A97A;
-}
-/* Couleur de la div1 */
-.divIndex1{
-  background-color: #A0AF81;
-}
+
+
 /* Parallax Index */
 .parallax{
   transform: translateY(250px);
@@ -102,3 +104,194 @@ a{
 }
 
 
+
+/*DIV CONTENTANT LA BARRE DE RECHERCHE*/
+.divIndex0{
+  text-align: center;
+  min-height: 100vh;
+  margin-bottom: 30px;
+  z-index: -1;
+  margin-top: -100px;
+}
+
+/* Div de la barre de recherche */
+.barreRecherche{
+  z-index: 50;
+  margin-top: 80px;
+
+}
+
+/*MAIN DE L'INDEX, FAIT POUR GERER L'IMAGE EN FOND*/
+.mainIndex{
+  margin-top: -70px;
+  background-image: url(../Images/fondindex.jpg);
+  background-size: auto;
+  background-repeat: no-repeat;
+  background-position: top;
+}
+/*BIENVENUE EN HAUTE DE PAGE*/
+.titrePhoto{
+  color: white;
+  margin-top: 150px;
+  font-family: 'Parisienne', cursive;
+  font-size: 150px;
+  text-shadow: 3px 3px 3px #d79a10;
+}
+
+/*BIENVENUE HAUT DE PAGE POUR PETITS ECRANS*/
+.titrePhotoPetit{
+  color: white;
+  margin-top: 150px;
+  font-family: 'Parisienne', cursive;
+  font-size: 90px;
+  text-shadow: 3px 3px 3px #d79a10;
+}
+
+/* Couleur de la div1 */
+.divIndex1{
+  margin-top: -25px;
+  background-color: white;
+  padding-top: 15px;
+}
+/*TITRES SECTIONS*/
+.txtIndexBlanc{
+  color: black;
+  font-family: 'Parisienne', cursive;
+  font-size: 100px;
+  text-shadow: 3px 3px 3px #d79a10;
+}
+.txtIndexNoir{
+  color: black;
+  font-family: 'Parisienne', cursive;
+  font-size: 100px;
+  text-shadow: 3px 3px 3px #d79a10;
+}
+
+/*TEXT QUI SOMMES NOUS ET IMAGE EQUIPE POUR ETABLIER ECART ENTRE*/
+.qSN{
+  color: black;
+  font-family: 'Montserrat', sans-serif;
+}
+.imageEquipe{
+  border-radius: 1em;
+}
+
+/*PAGE FOOTER*/
+.page-footer{
+  background-color: #1e1e1e;
+  background-image: url("../Images/idéefooter.jpg");
+  background-repeat: no-repeat;
+}
+
+/*HEADER DANS TOUTES LES PAGES SAUF ACCUEIL*/
+.headerN{
+  -webkit-box-shadow: 0px 3px 3px 0px rgba(50, 50, 50, 0.75); /*OMBRAGE NAV*/
+  -moz-box-shadow: 0px 3px 3px 0px rgba(50, 50, 50, 0.75); /*OMBRAGE NAV*/
+  box-shadow: 0px 3px 3px 0px rgba(50, 50, 50, 0.75); /*OMBRAGE NAV*/
+  background-color: transparent;
+  color: black;
+}
+/*LOGO MARQUE NAV*/
+.brand-logo{
+  margin-left: 20px;
+  font-family: 'Parisienne', cursive;
+}
+/*ECRITURE MARQUE PARTOUT SAUF ACCUEIL*/
+.brand-logo-header{
+  color: black;
+  margin-left: 20px;
+  font-family: 'Parisienne', cursive;
+  font-size: 30px;
+  margin-right: -1px;
+}
+
+.ulHeader{
+  margin-top: -65px;
+}
+/*LIENS HEADER PARTOUT SAUF ACCUEIL*/
+.headerG{
+  color: black;
+}
+/*LOGOS MARQUES DES PARTERNAIRES*/
+.partenaires{
+  margin-top: 5em;
+  margin-bottom: 10em;
+}
+/*DIV OU LES COMMENTAIRES SONT AFFICHES*/
+#response{
+  margin-top: 5em;
+  background-color: whitesmoke;
+  padding: 1em;
+  border-radius: 1em;
+}
+/*BOUTON POSTER AVIS*/
+.btn_avis{
+  margin-top: 10px;
+
+}
+
+/*COULEUR TEXTE BARRE DE RECHERCHE*/
+.barreRecherche{
+  color: white;
+
+}
+
+/* CHANGEMENT DE COULEUR DE LA LIGNE DE FOCUS DES INPUT */
+.input-field input:focus + label {
+  color: black !important;
+}
+.row .input-field input:focus {
+  border-bottom: 1px solid black !important;
+  box-shadow: 0 1px 0 0 black !important
+}
+
+/*DIV DU TEXTE DE LA PAGE 404 POUR LE FAIRE DESCENDRE*/
+.div404{
+  margin-top: 15%;
+  text-shadow: 3px 3px 3px black;
+
+}
+
+.txtIndex{
+  font-family: 'Parisienne', cursive;
+}
+
+.derArt{
+  margin: 100px;
+  margin-top: -80px;
+  margin-bottom: 50px;
+}
+
+/* PRODUITS */
+.divProduits{
+  display:flex;
+  flex-direction:row;
+  flex-wrap: wrap;
+  justify-content: center;
+}
+
+/* BOUTIQUE */
+.boutonPanier{
+  display: flex;
+  flex-direction: row;
+}
+
+/* PANIER */
+#boxPanier{
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
+}
+
+.produitRecherche{
+  color: white;
+}
+
+.decalerModifProd{
+  margin-top: 80px;
+}
+
+.sidenav{
+  color: white;
+  z-index: 100 !important;
+}

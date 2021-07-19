@@ -1,9 +1,31 @@
-M.AutoInit();
+
+// AJOUTER UN PRODUIT AU PANIER
+$(".addPanier").click(function(e){
+  e.preventDefault();
+  // Requête ajax 4 param (url du lien donc addpanier.php
+  // object (dans notre cas ce sera {} donc la $ qui contient l'id du produit)
+  // fonction à utiliser
+  // Format, dans notre cas JSON)
+  $.get($(this).attr('href'),{},function(data){
+
+    if(data.error){ //C.F error dans addpanier.php
+      alert(data.message);
+    }else{
+      // Ici error vaut false et retourne le message qui confirme l'ajout au panier
+      if(confirm(data.message + '. Voulez vous consulter votre panier?')){
+        location.href = '../boutique/panier.php'; // Redirection si on clique sur 'ok'
+      }
+    }
+
+  },"json");
+  return false;
+});
+
 afficherCommentaire();
 
 function showHideAddProduct() {
-  let divAddProducts = document.getElementById("formAddProduct");
-  let tableViewProducts = document.getElementById("tableProduct");
+  let divAddProducts = document.getElementById("formAddProduct"); //divAddProducts correspond a l'element ou l'id est egal à formAddProduct ou le formulaire d'ajout de produits qui est initialement caché
+  let tableViewProducts = document.getElementById("tableProduct"); //tableViewProducts correspond a la table
   let speechAjoutProduit = document.getElementById("divAjouterProduit");
   if (divAddProducts.style.display === "block") {
     divAddProducts.style.display = "none";
@@ -60,7 +82,8 @@ document.getElementById('formIndex').addEventListener('submit',function(e){ // R
   document.forms['formIndex'].reset(); //Vide les inputs du formulaire en question
 })
 //Envoyer un commentaire depuis la page index
-afficherCommentaire();
+
+
 
 //Voir les commentaires de la page index
 function afficherCommentaire() {
@@ -78,7 +101,7 @@ function afficherCommentaire() {
       block += '<p>' + retour[y].avis + '</p>'; // On récupère l'avis en bdd
       block += '<p>' + retour[y].note + ' <i class="las la-star"></i></p>'; // On récupère l'avis en bdd
       block += '<p class="right-align"> Posté par : <b>' + retour[y].prenom + '</b><p>'; // On récupère le prénom en bdd
-      block += '</div>';
+      block += '</div><hr>';
     }
     RepCom.innerHTML = block; // Dans la div response on envoi les éléments de la boucle for
   }
@@ -88,4 +111,6 @@ function afficherCommentaire() {
   xhr2.send('voirCom'); // voirCom est un élément HTML qu'on  créé, CF action.php
 
 }//Voir les commentaires de la page index
+
+
 

@@ -6,9 +6,8 @@ $pageAction = new index();
 // POSTER UN COMMENTAIRE
 if (isset($_POST['newCom']) ) { // CF JS #avis est devenu var commentaire donc indirectement $_POST['commentaire'];
 
-    $avisClient = htmlspecialchars(trim(addslashes($_POST['newCom']))); // Idem
+    $avisClient = htmlspecialchars(trim($_POST['newCom'])); // Idem
     $noteClient = htmlspecialchars(intval($_POST["note"]));
-
     echo $pageAction->envoyerCommentaire($avisClient, $noteClient);
 
 }
@@ -23,9 +22,8 @@ if(isset($_GET['voirCom'])){  // CF JS fonction afficherCommentaire sen('voirCom
 }
 // VOIR COMMENTAIRE QUAND ON EN POSTE UN
 
-
-$resultat = $pageAction->voirAvisClients(); // Ici afficher les commentaires en bdd
-echo json_encode($resultat); // On encode le résultat au format JSON
+    $resultat = $pageAction->voirAvisClients(); // Ici afficher les commentaires en bdd
+    echo json_encode($resultat); // On encode le résultat au format JSON
 
 
 ?>
